@@ -3,559 +3,237 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GG Legal — Practice Dashboard</title>
+<title>GG Legal</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #f5f4f0;
-    --surface: #ffffff;
-    --surface2: #f0efe9;
-    --border: rgba(0,0,0,0.09);
-    --border-strong: rgba(0,0,0,0.18);
-    --text: #1a1a18;
-    --text2: #6b6b65;
-    --text3: #9b9b95;
-    --accent: #1a1a18;
-    --red: #c0392b;
-    --red-bg: #fdf0ef;
-    --amber: #92540a;
-    --amber-bg: #fdf3e3;
-    --green: #1a5c3a;
-    --green-bg: #eaf4ee;
-    --blue: #1a3a5c;
-    --blue-bg: #eaf1f8;
-    --purple: #3c2d7a;
-    --purple-bg: #f0edfb;
-    --teal: #0d5c4a;
-    --teal-bg: #e4f3ef;
-    --radius: 10px;
-    --radius-sm: 6px;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  /* ── LOGIN ── */
-  #login-screen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--text);
-  }
-
-  .login-box {
-    background: var(--surface);
-    border-radius: 16px;
-    padding: 2.5rem 2rem;
-    width: 100%;
-    max-width: 360px;
-    margin: 1rem;
-  }
-
-  .login-logo {
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: .12em;
-    color: var(--text2);
-    margin-bottom: 2rem;
-    text-transform: uppercase;
-  }
-
-  .login-title {
-    font-size: 22px;
-    font-weight: 500;
-    margin-bottom: .3rem;
-  }
-
-  .login-sub {
-    font-size: 13px;
-    color: var(--text2);
-    margin-bottom: 1.75rem;
-  }
-
-  .login-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text2);
-    margin-bottom: 5px;
-    display: block;
-  }
-
-  .login-input {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    background: var(--bg);
-    color: var(--text);
-    margin-bottom: 1rem;
-    outline: none;
-    transition: border-color .15s;
-  }
-
-  .login-input:focus { border-color: var(--text); }
-
-  .login-btn {
-    width: 100%;
-    padding: 11px;
-    background: var(--text);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity .15s;
-  }
-
-  .login-btn:hover { opacity: .88; }
-
-  .login-err {
-    font-size: 12px;
-    color: var(--red);
-    margin-top: .75rem;
-    display: none;
-  }
-
-  /* ── APP ── */
-  #app { display: none; }
-
-  .topbar {
-    background: var(--text);
-    color: #fff;
-    padding: 0 1.5rem;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .topbar-logo {
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: .1em;
-    opacity: .9;
-  }
-
-  .topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .topbar-user {
-    font-size: 12px;
-    opacity: .6;
-  }
-
-  .topbar-logout {
-    font-size: 12px;
-    background: rgba(255,255,255,.12);
-    border: none;
-    color: #fff;
-    padding: 5px 12px;
-    border-radius: 99px;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  .topbar-logout:hover { background: rgba(255,255,255,.2); }
-
-  .main {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 1.5rem 1rem 4rem;
-  }
-
-  /* ── STATS ── */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 1.5rem;
-  }
-
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-  }
-
-  .stat-n {
-    font-size: 28px;
-    font-weight: 300;
-    font-family: 'DM Mono', monospace;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .stat-n.red { color: var(--red); }
-  .stat-l { font-size: 11px; color: var(--text2); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
-
-  /* ── TABS ── */
-  .tabs {
-    display: flex;
-    gap: 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 1.25rem;
-  }
-
-  .tab-btn {
-    padding: 9px 18px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    background: none;
-    color: var(--text2);
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    font-family: 'DM Sans', sans-serif;
-    transition: color .15s;
-  }
-
-  .tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
-  .tab-btn:hover { color: var(--text); }
-
-  .tab-section { display: none; }
-  .tab-section.active { display: block; }
-
-  /* ── TYPE GROUP ── */
-  .type-group { margin-bottom: 2rem; }
-
-  .type-header {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--text3);
-    margin-bottom: .75rem;
-    padding-bottom: 7px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .type-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  /* ── MATTER CARD ── */
-  .matter-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: .6rem;
-    overflow: hidden;
-    transition: border-color .15s, box-shadow .15s;
-  }
-
-  .matter-card:hover { border-color: var(--border-strong); }
-  .matter-card.expanded { border-color: var(--border-strong); box-shadow: 0 2px 12px rgba(0,0,0,.06); }
-
-  .card-header {
-    padding: 14px 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .card-header-main { flex: 1; min-width: 0; }
-
-  .matter-name {
-    font-weight: 500;
-    font-size: 14px;
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .matter-meta { font-size: 12px; color: var(--text2); }
-
-  .card-header-right {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    flex-shrink: 0;
-  }
-
-  .chevron {
-    width: 16px;
-    height: 16px;
-    color: var(--text3);
-    flex-shrink: 0;
-    transition: transform .2s;
-    margin-top: 2px;
-  }
-
-  .matter-card.expanded .chevron { transform: rotate(180deg); }
-
-  /* ── BADGES ── */
-  .badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 2px 9px;
-    border-radius: 99px;
-    white-space: nowrap;
-    font-family: 'DM Mono', monospace;
-  }
-
-  .b-red { background: var(--red-bg); color: var(--red); }
-  .b-amber { background: var(--amber-bg); color: var(--amber); }
-  .b-green { background: var(--green-bg); color: var(--green); }
-  .b-blue { background: var(--blue-bg); color: var(--blue); }
-  .b-purple { background: var(--purple-bg); color: var(--purple); }
-  .b-teal { background: var(--teal-bg); color: var(--teal); }
-  .b-grey { background: var(--surface2); color: var(--text2); }
-
-  /* ── EXPAND BODY ── */
-  .card-body {
-    display: none;
-    padding: 0 16px 16px;
-    border-top: 1px solid var(--border);
-    margin-top: 0;
-  }
-
-  .matter-card.expanded .card-body { display: block; }
-
-  .current-task {
-    background: var(--surface2);
-    border-radius: var(--radius-sm);
-    padding: 10px 12px;
-    margin: 14px 0 12px;
-  }
-
-  .ct-label {
-    font-size: 10px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    color: var(--text3);
-    margin-bottom: 4px;
-  }
-
-  .ct-text { font-size: 13px; color: var(--text); }
-
-  .fields { display: grid; gap: 10px; margin-bottom: 14px; }
-
-  .field { display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: start; }
-
-  .field-lbl {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--text3);
-    padding-top: 3px;
-  }
-
-  .field-val { font-size: 13px; color: var(--text2); }
-
-  /* ── BUNDLE ── */
-  .bundle-section { margin-bottom: 14px; }
-  .bundle-label {
-    font-size: 10px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    color: var(--text3);
-    margin-bottom: 8px;
-  }
-
-  .bundle-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-    gap: 5px;
-  }
-
-  .bundle-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    padding: 7px 10px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    background: var(--surface);
-    color: var(--text2);
-    transition: all .1s;
-    user-select: none;
-  }
-
-  .bundle-item:hover { border-color: var(--border-strong); }
-
-  .bundle-item.checked {
-    background: var(--green-bg);
-    border-color: #6bbf8e;
-    color: var(--green);
-  }
-
-  .bundle-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: 1.5px solid currentColor;
-    flex-shrink: 0;
-    opacity: .5;
-  }
-
-  .bundle-item.checked .bundle-dot {
-    background: var(--green);
-    border-color: var(--green);
-    opacity: 1;
-  }
-
-  /* ── ACTIONS ── */
-  .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .btn {
-    font-size: 12px;
-    font-weight: 500;
-    padding: 6px 14px;
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
-    background: none;
-    cursor: pointer;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    transition: background .12s;
-  }
-
-  .btn:hover { background: var(--surface2); }
-  .btn-danger { color: var(--red); border-color: #e8c0bc; }
-  .btn-danger:hover { background: var(--red-bg); }
-  .btn-primary { background: var(--text); color: #fff; border-color: var(--text); }
-  .btn-primary:hover { opacity: .88; background: var(--text); }
-
-  /* ── ADD NEW ── */
-  .add-btn {
-    width: 100%;
-    padding: 10px;
-    border: 1px dashed var(--border-strong);
-    border-radius: var(--radius);
-    background: none;
-    font-size: 13px;
-    color: var(--text2);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: all .12s;
-    margin-bottom: .6rem;
-  }
-
-  .add-btn:hover { background: var(--surface); color: var(--text); border-style: solid; }
-
-  /* ── MODAL ── */
-  .modal-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.45);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-
-  .modal-backdrop.open { display: flex; }
-
-  .modal {
-    background: var(--surface);
-    border-radius: 14px;
-    padding: 1.75rem;
-    width: 100%;
-    max-width: 520px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  .modal-title {
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 1.25rem;
-  }
-
-  .form-group { margin-bottom: 1rem; }
-  .form-label { font-size: 12px; font-weight: 500; color: var(--text2); display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em; }
-
-  .form-input, .form-select, .form-textarea {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    background: var(--bg);
-    color: var(--text);
-    outline: none;
-  }
-
-  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--text); }
-  .form-textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; }
-
-  /* ── ASSISTED ── */
-  .assisted-table {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-
-  .assisted-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 11px 16px;
-    border-bottom: 1px solid var(--border);
-    gap: 12px;
-  }
-
-  .assisted-row:last-child { border-bottom: none; }
-
-  .assisted-name { font-size: 13px; font-weight: 500; }
-  .assisted-court { font-size: 12px; color: var(--text2); margin-top: 1px; }
-  .assisted-stage { font-size: 12px; color: var(--text2); text-align: right; max-width: 220px; }
-
-  /* ── MOBILE ── */
-  @media (max-width: 600px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .form-row { grid-template-columns: 1fr; }
-    .field { grid-template-columns: 1fr; gap: 2px; }
-    .card-header { flex-wrap: wrap; }
-    .card-header-right { width: 100%; justify-content: flex-start; }
-  }
-
-  .empty-type { display: none; }
+:root{
+  --bg:#0e0e0d;--surface:#161614;--surface2:#1e1e1c;--surface3:#252522;
+  --border:rgba(255,255,255,.07);--border-strong:rgba(255,255,255,.13);
+  --text:#dddbd4;--text2:#777770;--text3:#444440;
+  --red:#d95f5f;--red-bg:rgba(217,95,95,.1);
+  --amber:#c9853a;--amber-bg:rgba(201,133,58,.1);
+  --green:#4a9e6e;--green-bg:rgba(74,158,110,.1);
+  --blue:#5a8fc9;--blue-bg:rgba(90,143,201,.1);
+  --purple:#8a7ec9;--purple-bg:rgba(138,126,201,.1);
+  --court-bg:rgba(90,143,201,.08);--court-txt:#6da0d8;
+  --office-bg:rgba(74,158,110,.08);--office-txt:#5ebb8a;
+  --flag-bg:rgba(201,133,58,.08);--flag-txt:#c9853a;
+  --radius:7px;--radius-sm:5px;--sidebar:252px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh}
+
+/* LOGIN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:2.5rem 2rem;width:100%;max-width:320px;margin:1rem}
+.login-logo{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--text3);margin-bottom:2rem;text-transform:uppercase;font-weight:500}
+.l-label{font-size:11px;font-weight:500;color:var(--text3);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:.05em}
+.l-input{width:100%;padding:10px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;background:var(--surface2);color:var(--text);margin-bottom:1rem;outline:none}
+.l-input:focus{border-color:var(--text3)}
+.l-btn{width:100%;padding:11px;background:var(--surface3);color:var(--text2);border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;cursor:pointer;letter-spacing:.04em}
+.l-btn:hover{color:var(--text);border-color:var(--text3)}
+.l-err{font-size:12px;color:var(--red);margin-top:.75rem;display:none}
+
+/* APP */
+#app{display:none;flex-direction:column;min-height:100vh}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);color:var(--text);height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;position:sticky;top:0;z-index:100;flex-shrink:0}
+.topbar-logo{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--text3);cursor:pointer;text-transform:uppercase}
+.topbar-r{display:flex;align-items:center;gap:1rem}
+.topbar-user{font-size:12px;color:var(--text3)}
+.topbar-out{font-size:11px;background:none;border:1px solid var(--border-strong);color:var(--text3);padding:4px 12px;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.topbar-out:hover{color:var(--text2);border-color:var(--text3)}
+.app-body{display:flex;flex:1;min-height:0}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:46px;height:calc(100vh - 46px);overflow-y:auto}
+.sb-sec{padding:14px;border-bottom:1px solid var(--border)}
+.sb-sec:last-child{border-bottom:none;flex:1}
+.cal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.cal-lbl{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+.cn-btn{border:none;background:none;color:var(--text3);cursor:pointer;padding:2px 7px;font-size:15px;border-radius:4px;line-height:1}
+.cn-btn:hover{color:var(--text2)}
+.cal-dow-row{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:3px}
+.cdow{text-align:center;font-size:10px;font-weight:500;color:var(--text3);padding:2px 0}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
+.cday{text-align:center;font-size:11px;padding:4px 1px;border-radius:4px;line-height:1.1;min-height:20px;color:var(--text2)}
+.cday.other{color:var(--text3)}
+.cday.today{background:var(--text);color:var(--bg);border-radius:50%;font-weight:500}
+.cday.has-flag:not(.today){background:var(--flag-bg);color:var(--flag-txt)}
+.cday.has-court:not(.today):not(.has-flag){background:var(--court-bg);color:var(--court-txt)}
+.cday.has-office:not(.today):not(.has-flag):not(.has-court){background:var(--office-bg);color:var(--office-txt)}
+.cal-legend{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text3)}
+.leg-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.sb-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:9px}
+.ti{background:var(--surface2);border-radius:var(--radius-sm);padding:8px 10px;margin-bottom:4px;border-left:2px solid var(--border-strong);cursor:pointer}
+.ti:hover{background:var(--surface3)}
+.ti.urg{border-left-color:var(--red)}.ti.soon{border-left-color:var(--amber)}.ti.off{border-left-color:var(--green)}
+.ti-name{font-size:12px;font-weight:500;color:var(--text);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ti-det{font-size:11px;color:var(--text2);line-height:1.35;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ti-tag{font-size:10px;font-weight:500;padding:1px 7px;border-radius:99px;font-family:'DM Mono',monospace}
+.tg-urg{background:var(--red-bg);color:var(--red)}.tg-soon{background:var(--amber-bg);color:var(--amber)}
+.tg-off{background:var(--green-bg);color:var(--green)}.tg-rec{background:var(--surface2);color:var(--text3)}
+.empty-ti{font-size:12px;color:var(--text3);text-align:center;padding:1.5rem 0}
+
+/* MAIN */
+.main-content{flex:1;min-width:0;overflow-y:auto}
+
+/* DASHBOARD */
+#view-dashboard{padding:1.25rem 1.25rem 4rem}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.25rem}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px}
+.stat-n{font-size:24px;font-weight:300;font-family:'DM Mono',monospace;line-height:1;margin-bottom:3px;color:var(--text)}
+.stat-n.red{color:var(--red)}
+.stat-l{font-size:10px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.1rem}
+.tab-btn{padding:8px 16px;font-size:12px;font-weight:400;cursor:pointer;border:none;background:none;color:var(--text3);border-bottom:1px solid transparent;margin-bottom:-1px;font-family:'DM Sans',sans-serif;letter-spacing:.02em}
+.tab-btn.active{color:var(--text2);border-bottom-color:var(--text3)}.tab-btn:hover{color:var(--text2)}
+.tab-section{display:none}.tab-section.active{display:block}
+.type-group{margin-bottom:1.75rem}
+.type-hd{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.65rem;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
+.type-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.matter-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.3rem;padding:11px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .12s,background .12s}
+.matter-row:hover{border-color:var(--border-strong);background:var(--surface2)}
+.mr-main{flex:1;min-width:0}
+.mr-name{font-weight:500;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.mr-sub{font-size:11px;color:var(--text2);margin-top:1px}
+.mr-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap;font-family:'DM Mono',monospace}
+.b-red{background:var(--red-bg);color:var(--red)}.b-amber{background:var(--amber-bg);color:var(--amber)}
+.b-green{background:var(--green-bg);color:var(--green)}.b-grey{background:var(--surface2);color:var(--text3)}
+.b-blue{background:var(--blue-bg);color:var(--blue)}
+.add-btn{width:100%;padding:9px;border:1px dashed var(--border-strong);border-radius:var(--radius);background:none;font-size:13px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:.5rem}
+.add-btn:hover{background:var(--surface);color:var(--text);border-style:solid}
+.assisted-table{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.a-row{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-bottom:1px solid var(--border);gap:10px}
+.a-row:last-child{border-bottom:none}
+.a-name{font-size:13px;font-weight:500}.a-court{font-size:11px;color:var(--text2)}
+.a-stage{font-size:11px;color:var(--text2);text-align:right;max-width:190px}
+
+/* ── CASE FILE ── */
+#view-case{display:none;flex-direction:column}
+
+.case-header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 20px 0}
+.case-back{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer;margin-bottom:12px;width:fit-content}
+.case-back:hover{color:var(--text)}
+.case-back svg{width:14px;height:14px}
+.case-hd-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:4px}
+.case-surname{font-size:22px;font-weight:500;line-height:1.15}
+.case-stages-auto{font-size:12px;color:var(--text2);margin-top:3px}
+.case-stages-auto strong{color:var(--text)}
+.case-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);margin-top:2px}
+.case-greeting{font-size:13px;color:var(--text2);margin-bottom:5px}
+.case-greeting strong{color:var(--text)}
+.case-badges{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+
+/* PROGRESS TRACKER */
+.progress-track{padding:16px 20px 18px;background:var(--surface);border-bottom:1px solid var(--border)}
+.pt-inner{display:flex;align-items:flex-start;position:relative}
+.pt-line{position:absolute;top:15px;left:15px;right:15px;height:2px;background:var(--border);z-index:0}
+.pt-line-fill{position:absolute;top:15px;left:15px;height:2px;background:var(--green);z-index:1;transition:width .4s}
+.pt-steps{display:flex;justify-content:space-between;width:100%;position:relative;z-index:2}
+.pt-step{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:0}
+.pt-circle{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;cursor:pointer;position:relative}
+.pt-circle.done{background:var(--green);border-color:var(--green)}
+.pt-circle.active{background:var(--surface2);border-color:var(--red);box-shadow:0 0 0 3px rgba(217,95,95,.1)}
+.pt-circle.pending{background:var(--surface);border-color:var(--border)}
+.pt-circle.overdue{background:var(--red-bg);border-color:var(--red)}
+.pt-circle.finalised{background:var(--surface2);border-color:var(--text3)}
+.pt-circle.early-end{background:var(--amber-bg);border-color:var(--amber)}
+.pt-circle svg{width:13px;height:13px}
+.pt-label{font-size:10px;text-align:center;color:var(--text2);line-height:1.3;max-width:60px;word-break:break-word}
+.pt-label.done{color:var(--green);font-weight:500}
+.pt-label.active{color:var(--red);font-weight:500}
+.pt-label.early-end{color:var(--amber);font-weight:500}
+.pt-collapsed{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--amber);background:var(--amber-bg);border-radius:var(--radius-sm);padding:7px 12px;margin-top:8px}
+.pt-collapsed svg{width:14px;height:14px;flex-shrink:0}
+.pt-edit-link{font-size:11px;color:var(--text3);cursor:pointer;text-decoration:underline;margin-left:auto}
+.pt-edit-link:hover{color:var(--text2)}
+
+/* CASE BODY */
+.case-body{flex:1;overflow-y:auto;padding:20px}
+
+/* COMPOSER */
+.composer{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1.5rem;overflow:hidden}
+.composer-top{padding:14px 16px 0}
+.composer-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.comp-type-btn{font-size:11px;font-weight:500;padding:4px 11px;border:1px solid var(--border);border-radius:99px;background:none;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text2);transition:all .12s}
+.comp-type-btn:hover,.comp-type-btn.active{background:var(--surface3);color:var(--text);border-color:var(--border-strong)}
+.comp-textarea{width:100%;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);resize:none;min-height:72px;line-height:1.6;padding:0 16px;background:transparent}
+.comp-textarea::placeholder{color:var(--text3)}
+.composer-bottom{padding:10px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.comp-bl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.comp-staff{font-size:12px;padding:5px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;background:var(--surface2);color:var(--text2);outline:none}
+.comp-upload-btn{font-size:12px;padding:5px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:none;cursor:pointer;color:var(--text2);font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px}
+.comp-upload-btn:hover{background:var(--surface2)}
+.comp-file-name{font-size:11px;color:var(--green);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#comp-file-input{display:none}
+.comp-add-btn{padding:6px 18px;background:var(--surface3);color:var(--text2);border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:400;cursor:pointer;letter-spacing:.03em}
+.comp-add-btn:hover{color:var(--text);border-color:var(--text3)}
+
+/* TIMELINE */
+.tl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.tl-header-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--text3)}
+.tl-count{font-size:11px;color:var(--text3)}
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:1px;background:var(--border)}
+.tl-entry{position:relative;margin-bottom:1rem}
+.tl-dot{position:absolute;left:-24px;top:13px;width:11px;height:11px;border-radius:50%;border:2px solid var(--surface);flex-shrink:0}
+.tl-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .12s}
+.tl-card:hover{border-color:var(--border-strong)}
+.tl-card-top{padding:10px 13px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.tl-meta{flex:1;min-width:0}
+.tl-type-badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;font-family:'DM Mono',monospace;display:inline-block;margin-bottom:5px}
+.tl-note{font-size:13px;color:var(--text);line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.tl-right{text-align:right;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.tl-date{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3)}
+.tl-staff-dot{width:26px;height:26px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--text2);font-family:'DM Mono',monospace}
+.tl-actions{display:flex;gap:4px;opacity:0;transition:opacity .15s}
+.tl-card:hover .tl-actions{opacity:1}
+.tl-action-btn{border:none;background:none;cursor:pointer;padding:3px 5px;border-radius:4px;color:var(--text3)}
+.tl-action-btn:hover{background:var(--surface2);color:var(--text2)}
+.tl-action-btn svg{width:14px;height:14px;display:block}
+.tl-file{border-top:1px solid var(--border);padding:8px 13px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--blue);cursor:pointer;background:var(--blue-bg)}
+.tl-file:hover{opacity:.8}
+.tl-file svg{width:14px;height:14px;flex-shrink:0}
+.tl-file-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.empty-tl{text-align:center;padding:2.5rem 0;color:var(--text3);font-size:13px}
+
+/* entry colours */
+.dot-court{background:#378ADD}.dot-note{background:#888780}.dot-doc{background:#1D9E75}
+.dot-task{background:#7F77DD}.dot-client{background:#D85A30}.dot-corr{background:#D4537E}
+.type-court{background:var(--court-bg);color:var(--court-txt)}.type-note{background:var(--surface2);color:var(--text2)}
+.type-doc{background:var(--green-bg);color:var(--green)}.type-task{background:var(--purple-bg);color:var(--purple)}
+.type-client{background:rgba(217,95,95,.08);color:#d98888}.type-corr{background:rgba(212,83,126,.08);color:#d47fa0}
+
+/* MODALS */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border-strong);border-radius:10px;padding:1.5rem;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:15px;font-weight:500;margin-bottom:1.1rem}
+.fg{margin-bottom:.8rem}
+.fg label{font-size:11px;font-weight:500;color:var(--text2);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.fi,.fs,.ft{width:100%;padding:8px 11px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--surface2);color:var(--text);outline:none}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--text3)}
+.ft{resize:vertical;min-height:60px;line-height:1.5}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.modal-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:1rem}
+.btn{font-size:12px;font-weight:400;padding:5px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:none;cursor:pointer;color:var(--text2);font-family:'DM Sans',sans-serif;transition:background .1s}
+.btn:hover{background:var(--surface2);color:var(--text)}
+.btn-danger{color:var(--red);border-color:var(--border-strong)}.btn-danger:hover{background:var(--red-bg)}
+.btn-primary{background:var(--surface3);color:var(--text2);border-color:var(--border-strong)}.btn-primary:hover{color:var(--text);border-color:var(--text3);background:var(--surface3)}
+.flag-toggle{display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface2);cursor:pointer;user-select:none;font-size:13px;color:var(--text3)}
+.flag-toggle.on{background:var(--flag-bg);border-color:#e5c76b;color:var(--flag-txt)}
+.flag-toggle input{cursor:pointer;width:auto}
+
+/* ENTRY EDIT MODAL */
+.entry-edit-modal .modal{max-width:480px}
+
+@media(max-width:700px){
+  .sidebar{display:none}.stats-grid{grid-template-columns:repeat(2,1fr)}
+  .form-row{grid-template-columns:1fr}.case-hd-row{flex-direction:column}
+  .case-badges{justify-content:flex-start}.pt-label{font-size:9px;max-width:46px}
+}
 </style>
 </head>
 <body>
@@ -564,147 +242,182 @@
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">GG Legal</div>
-    <div class="login-title">Practice dashboard</div>
-    <div class="login-sub">Jason Rodrigues — sign in to continue</div>
-    <label class="login-label">Username</label>
-    <input class="login-input" type="text" id="login-user" placeholder="username" autocomplete="username">
-    <label class="login-label">Password</label>
-    <input class="login-input" type="password" id="login-pass" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="login-btn" onclick="doLogin()">Sign in</button>
-    <div class="login-err" id="login-err">Incorrect username or password.</div>
+    <label class="l-label">Username</label>
+    <input class="l-input" type="text" id="lu" placeholder="username" autocomplete="username">
+    <label class="l-label">Password</label>
+    <input class="l-input" type="password" id="lp" placeholder="password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="l-btn" onclick="doLogin()">Sign in</button>
+    <div class="l-err" id="l-err">Incorrect username or password.</div>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
   <div class="topbar">
-    <div class="topbar-logo">GG Legal / Dashboard</div>
-    <div class="topbar-right">
+    <div class="topbar-logo" onclick="goToDashboard()">GG Legal</div>
+    <div class="topbar-r">
       <span class="topbar-user">Jason Rodrigues</span>
-      <button class="topbar-logout" onclick="doLogout()">Sign out</button>
+      <button class="topbar-out" onclick="doLogout()">Sign out</button>
     </div>
   </div>
+  <div class="app-body">
 
-  <div class="main">
-    <div class="stats-grid" id="stats-grid"></div>
-
-    <div class="tabs">
-      <button class="tab-btn active" onclick="showTab('my')">My matters</button>
-      <button class="tab-btn" onclick="showTab('assisted')">Assisted / agency</button>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sb-sec">
+        <div class="cal-hd">
+          <div class="cal-lbl" id="cal-lbl"></div>
+          <div style="display:flex;gap:1px">
+            <button class="cn-btn" onclick="calNav(-1)">&#8249;</button>
+            <button class="cn-btn" onclick="calNav(0)" style="font-size:11px;padding:2px 4px">&#9679;</button>
+            <button class="cn-btn" onclick="calNav(1)">&#8250;</button>
+          </div>
+        </div>
+        <div class="cal-dow-row">
+          <div class="cdow">M</div><div class="cdow">T</div><div class="cdow">W</div>
+          <div class="cdow">T</div><div class="cdow">F</div><div class="cdow">S</div><div class="cdow">S</div>
+        </div>
+        <div class="cal-days" id="cal-days"></div>
+        <div class="cal-legend">
+          <div class="leg-item"><div class="leg-dot" style="background:var(--court-bg);border:1px solid var(--court-txt)"></div>Court appearance</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--office-bg);border:1px solid var(--office-txt)"></div>Office / admin work</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--flag-bg);border:1px solid var(--flag-txt)"></div>Flagged</div>
+        </div>
+      </div>
+      <div class="sb-sec">
+        <div class="sb-title" id="today-title"></div>
+        <div id="today-list"></div>
+      </div>
     </div>
 
-    <div id="tab-my" class="tab-section active">
-      <div id="my-matters-root"></div>
-      <button class="add-btn" onclick="openAddModal()">+ Add new matter</button>
-    </div>
+    <!-- MAIN -->
+    <div class="main-content" id="main-content">
 
-    <div id="tab-assisted" class="tab-section">
-      <div class="assisted-table" id="assisted-root"></div>
+      <!-- DASHBOARD -->
+      <div id="view-dashboard">
+        <div style="padding:1.25rem 1.25rem 4rem">
+          <div class="stats-grid" id="stats-grid"></div>
+          <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('my')">My matters</button>
+            <button class="tab-btn" onclick="showTab('assisted')">Assisted / agency</button>
+          </div>
+          <div id="tab-my" class="tab-section active">
+            <div id="my-root"></div>
+            <button class="add-btn" onclick="openAddModal()">+ Add new matter</button>
+          </div>
+          <div id="tab-assisted" class="tab-section">
+            <div class="assisted-table" id="assisted-root"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASE FILE -->
+      <div id="view-case">
+        <div class="case-header">
+          <div class="case-back" onclick="goToDashboard()">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 12L6 8l4-4"/></svg>
+            Back to dashboard
+          </div>
+          <div class="case-hd-row">
+            <div>
+              <div class="case-surname" id="cf-surname"></div>
+              <div class="case-stages-auto" id="cf-stages-auto"></div>
+              <div class="case-num" id="cf-casenum"></div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div class="case-greeting">Hi, <strong>Jason</strong></div>
+              <div class="case-badges" id="cf-badges"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROGRESS TRACKER -->
+        <div class="progress-track" id="progress-track">
+          <div style="position:relative">
+            <div class="pt-line"></div>
+            <div class="pt-line-fill" id="pt-line-fill"></div>
+            <div class="pt-steps" id="pt-steps"></div>
+          </div>
+          <div id="pt-collapsed"></div>
+          <div style="margin-top:8px;display:flex;align-items:center;justify-content:flex-end">
+            <span class="pt-edit-link" onclick="openStageModal()">Override stage</span>
+          </div>
+        </div>
+
+        <div class="case-body">
+          <!-- Composer -->
+          <div class="composer">
+            <div class="composer-top">
+              <div class="composer-row">
+                <button class="comp-type-btn active" data-type="court" onclick="setCompType(this)">Court appearance</button>
+                <button class="comp-type-btn" data-type="note" onclick="setCompType(this)">File note</button>
+                <button class="comp-type-btn" data-type="doc" onclick="setCompType(this)">Document</button>
+                <button class="comp-type-btn" data-type="task" onclick="setCompType(this)">Task completed</button>
+                <button class="comp-type-btn" data-type="client" onclick="setCompType(this)">Client comm.</button>
+                <button class="comp-type-btn" data-type="corr" onclick="setCompType(this)">Correspondence</button>
+              </div>
+              <textarea class="comp-textarea" id="comp-text" placeholder="Add a note, file note, or description of what happened…" rows="3"></textarea>
+            </div>
+            <div class="composer-bottom">
+              <div class="comp-bl">
+                <select class="comp-staff" id="comp-staff">
+                  <option value="JR">JR — Jason</option>
+                  <option value="GG">GG — Greg</option>
+                  <option value="PG">PG — Paige</option>
+                  <option value="JN">JN</option>
+                </select>
+                <button class="comp-upload-btn" onclick="document.getElementById('comp-file-input').click()">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 11V3M5 6l3-3 3 3M3 13h10"/></svg>
+                  Attach file
+                </button>
+                <span class="comp-file-name" id="comp-file-name"></span>
+                <input type="file" id="comp-file-input" accept=".pdf,.doc,.docx,.txt" onchange="handleFileSelect(this)">
+              </div>
+              <button class="comp-add-btn" onclick="addEntry()">Add entry</button>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="tl-header">
+            <span class="tl-header-label">Activity feed</span>
+            <span class="tl-count" id="tl-count"></span>
+          </div>
+          <div class="timeline" id="case-timeline"></div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- EDIT MODAL -->
-<div class="modal-backdrop" id="edit-modal">
-  <div class="modal">
-    <div class="modal-title" id="edit-modal-title">Edit matter</div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Matter name</label>
-        <input class="form-input" id="ef-name" type="text">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Court</label>
-        <input class="form-input" id="ef-court" type="text">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Type</label>
-        <select class="form-select" id="ef-type">
-          <option value="trial">Trial</option>
-          <option value="dc_sentence">DC sentence</option>
-          <option value="lc_sentence">LC sentence</option>
-          <option value="bail">Bail / variation</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Next court date</label>
-        <input class="form-input" id="ef-date" type="date">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Stage</label>
-      <input class="form-input" id="ef-stage" type="text" placeholder="e.g. Committed for sentence">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Currently working on</label>
-      <textarea class="form-textarea" id="ef-task" placeholder="What are you actively doing right now?"></textarea>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Next steps / to do</label>
-      <textarea class="form-textarea" id="ef-next" placeholder="What needs to happen next?"></textarea>
-    </div>
-    <div class="form-group">
-      <label class="form-label">
-        <input type="checkbox" id="ef-custody" style="margin-right:6px">
-        Client in custody
-      </label>
-    </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('edit-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveEdit()">Save changes</button>
-    </div>
-  </div>
-</div>
-
-<!-- ADD MODAL -->
+<!-- ADD MATTER MODAL -->
 <div class="modal-backdrop" id="add-modal">
   <div class="modal">
     <div class="modal-title">Add new matter</div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Matter name</label>
-        <input class="form-input" id="af-name" type="text" placeholder="R v ...">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Court</label>
-        <input class="form-input" id="af-court" type="text" placeholder="e.g. District Court">
+      <div class="fg"><label>Matter name (R v ...)</label><input class="fi" id="af-name" type="text" placeholder="R v Smith"></div>
+      <div class="fg"><label>Case number</label><input class="fi" id="af-casenum" type="text" placeholder="2026/00123456"></div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>Court</label><input class="fi" id="af-court" type="text"></div>
+      <div class="fg"><label>Type</label>
+        <select class="fs" id="af-type">
+          <option value="trial">Trial</option><option value="dc_sentence">DC sentence</option>
+          <option value="lc_sentence">LC sentence</option><option value="bail">Bail / variation</option>
+        </select>
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Type</label>
-        <select class="form-select" id="af-type">
-          <option value="trial">Trial</option>
-          <option value="dc_sentence">DC sentence</option>
-          <option value="lc_sentence">LC sentence</option>
-          <option value="bail">Bail / variation</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Next court date</label>
-        <input class="form-input" id="af-date" type="date">
-      </div>
+      <div class="fg"><label>Next court date</label><input class="fi" id="af-date" type="date"></div>
+      <div class="fg"><label>Next step (brief)</label><input class="fi" id="af-nextstep" type="text" placeholder="e.g. Bail release application"></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Stage</label>
-      <input class="form-input" id="af-stage" type="text" placeholder="e.g. First mention">
+    <div class="fg"><label>Stage</label><input class="fi" id="af-stage" type="text" placeholder="e.g. First mention"></div>
+    <div class="fg"><label>Currently working on</label><textarea class="ft" id="af-task"></textarea></div>
+    <div class="form-row">
+      <div class="fg"><label>Office work date</label><input class="fi" id="af-odate" type="date"></div>
+      <div class="fg"><label>Office work label</label><input class="fi" id="af-olabel" type="text"></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Currently working on</label>
-      <textarea class="form-textarea" id="af-task"></textarea>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Next steps</label>
-      <textarea class="form-textarea" id="af-next"></textarea>
-    </div>
-    <div class="form-group">
-      <label class="form-label">
-        <input type="checkbox" id="af-custody" style="margin-right:6px">
-        Client in custody
-      </label>
-    </div>
+    <div class="fg"><div style="display:flex;align-items:center;gap:8px;font-size:13px"><input type="checkbox" id="af-custody"> Client in custody</div></div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('add-modal')">Cancel</button>
       <button class="btn btn-primary" onclick="addMatter()">Add matter</button>
@@ -712,346 +425,716 @@
   </div>
 </div>
 
+<!-- EDIT MATTER MODAL -->
+<div class="modal-backdrop" id="edit-modal">
+  <div class="modal">
+    <div class="modal-title" id="edit-title">Edit matter</div>
+    <div class="form-row">
+      <div class="fg"><label>Matter name</label><input class="fi" id="ef-name" type="text"></div>
+      <div class="fg"><label>Case number</label><input class="fi" id="ef-casenum" type="text"></div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>Court</label><input class="fi" id="ef-court" type="text"></div>
+      <div class="fg"><label>Type</label>
+        <select class="fs" id="ef-type">
+          <option value="trial">Trial</option><option value="dc_sentence">DC sentence</option>
+          <option value="lc_sentence">LC sentence</option><option value="bail">Bail / variation</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>Next court date</label><input class="fi" id="ef-date" type="date"></div>
+      <div class="fg"><label>Next step (brief)</label><input class="fi" id="ef-nextstep" type="text"></div>
+    </div>
+    <div class="fg"><label>Stage</label><input class="fi" id="ef-stage" type="text"></div>
+    <div class="fg"><label>Currently working on</label><textarea class="ft" id="ef-task"></textarea></div>
+    <div class="form-row">
+      <div class="fg"><label>Office work date</label><input class="fi" id="ef-odate" type="date"></div>
+      <div class="fg"><label>Office work label</label><input class="fi" id="ef-olabel" type="text"></div>
+    </div>
+    <div class="fg">
+      <label>Attention flag</label>
+      <div class="flag-toggle" id="ef-flag-row" onclick="toggleFlag()">
+        <input type="checkbox" id="ef-flag"><span>Flag this matter — needs attention</span>
+      </div>
+    </div>
+    <div class="fg"><div style="display:flex;align-items:center;gap:8px;font-size:13px"><input type="checkbox" id="ef-custody"> Client in custody</div></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('edit-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE OVERRIDE MODAL -->
+<div class="modal-backdrop" id="stage-modal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-title">Override case stage</div>
+    <div class="fg">
+      <label>Current stage</label>
+      <select class="fs" id="sm-stage">
+        <option value="">— Auto detect —</option>
+        <option value="0">First mention</option>
+        <option value="1">Brief served / negotiations</option>
+        <option value="2">Plea / committal / election</option>
+        <option value="3">Hearing / trial</option>
+        <option value="4">Sentence</option>
+        <option value="5">Appeal</option>
+        <option value="6">Finalised / withdrawn</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Finalised early? (withdrawn, s10, s14 etc.)</label>
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:8px"><input type="checkbox" id="sm-early"> Yes — finalised before full proceedings</div>
+      <input class="fi" id="sm-early-label" type="text" placeholder="e.g. Withdrawn — complainant overseas" style="display:none">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('stage-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStageOverride()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ENTRY EDIT MODAL -->
+<div class="modal-backdrop" id="entry-modal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-title">Edit entry</div>
+    <div class="fg">
+      <label>Type</label>
+      <select class="fs" id="em-type">
+        <option value="court">Court appearance</option><option value="note">File note</option>
+        <option value="doc">Document</option><option value="task">Task completed</option>
+        <option value="client">Client comm.</option><option value="corr">Correspondence</option>
+      </select>
+    </div>
+    <div class="fg"><label>Note</label><textarea class="ft" id="em-note" style="min-height:100px"></textarea></div>
+    <div class="form-row">
+      <div class="fg"><label>Staff</label>
+        <select class="fs" id="em-staff">
+          <option value="JR">JR — Jason</option><option value="GG">GG — Greg</option>
+          <option value="PG">PG — Paige</option><option value="JN">JN</option>
+        </select>
+      </div>
+      <div class="fg"><label>Date override</label><input class="fi" id="em-date" type="datetime-local"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" onclick="deleteEntry()">Delete entry</button>
+      <button class="btn" onclick="closeModal('entry-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEntryEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// ── AUTH ──
-const USERS = { jason: 'gg2026' };
-
-function doLogin() {
-  const u = document.getElementById('login-user').value.trim().toLowerCase();
-  const p = document.getElementById('login-pass').value;
-  if (USERS[u] && USERS[u] === p) {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
+const USERS={jason:'gg2026'};
+function doLogin(){
+  const u=document.getElementById('lu').value.trim().toLowerCase();
+  const p=document.getElementById('lp').value;
+  if(USERS[u]&&USERS[u]===p){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='flex';
     render();
-  } else {
-    document.getElementById('login-err').style.display = 'block';
+  } else { document.getElementById('l-err').style.display='block'; }
+}
+function doLogout(){
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('lu').value='';document.getElementById('lp').value='';
+}
+
+// ── STAGE DEFINITIONS ──
+const STAGES=[
+  {key:'mention',label:'First mention'},
+  {key:'brief',label:'Brief / negotiations'},
+  {key:'plea',label:'Plea / committal'},
+  {key:'hearing',label:'Hearing / trial'},
+  {key:'sentence',label:'Sentence'},
+  {key:'appeal',label:'Appeal'},
+  {key:'finalised',label:'Finalised'},
+];
+
+// keywords to auto-detect stage from entries
+const STAGE_KW=[
+  ['mention','first mention','court date','adjourned'],
+  ['brief','service','served','negotiations','conference','case conference'],
+  ['plea','guilty','not guilty','committal','election'],
+  ['hearing','trial','voir dire'],
+  ['sentence','sentenced','sentencing'],
+  ['appeal'],
+  ['finalised','withdrawn','dismissed','acquitted','s10','s14','s4'],
+];
+
+function detectStage(m){
+  if(m.stageOverride!==undefined&&m.stageOverride!==null&&m.stageOverride!=='') return parseInt(m.stageOverride);
+  if(!m.entries||!m.entries.length) return 0;
+  const sorted=[...m.entries].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  for(const e of sorted){
+    const txt=(e.note||'').toLowerCase();
+    for(let i=STAGE_KW.length-1;i>=0;i--){
+      if(STAGE_KW[i].some(k=>txt.includes(k))) return i;
+    }
   }
+  return 0;
 }
 
-function doLogout() {
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-user').value = '';
-  document.getElementById('login-pass').value = '';
-}
+const TODAY=new Date();TODAY.setHours(0,0,0,0);
+const TS=TODAY.toISOString().split('T')[0];
+const CKW=['hearing','sentence','committal','mention','trial','callover','arraignment','bail','application','certification','revocation','variation','appeal','voir dire'];
+function isCS(s){if(!s)return false;const l=s.toLowerCase();return CKW.some(k=>l.includes(k));}
 
-// ── DATA ──
-const BUNDLE_KEYS = ['psych','affidavit','apology','employment','supporting','submissions','crown'];
-const BUNDLE_LABELS = ['Psych / medical report','Affidavit (defendant)','Letter of apology','Employment letter','Supporting letters','Written submissions','Crown bundle reviewed'];
-
-const TODAY = new Date('2026-04-02');
-
-const TYPES = [
-  { key: 'trial', label: 'Trial matters', color: '#7F77DD', dotColor: '#7F77DD' },
-  { key: 'dc_sentence', label: 'District Court sentence', color: '#D4537E', dotColor: '#D4537E' },
-  { key: 'lc_sentence', label: 'Local Court sentence', color: '#1D9E75', dotColor: '#1D9E75' },
-  { key: 'bail', label: 'Bail applications & variations', color: '#BA7517', dotColor: '#BA7517' },
+const TYPES=[
+  {key:'trial',label:'Trial matters',color:'#7F77DD'},
+  {key:'dc_sentence',label:'District Court sentence',color:'#D4537E'},
+  {key:'lc_sentence',label:'Local Court sentence',color:'#1D9E75'},
+  {key:'bail',label:'Bail applications & variations',color:'#BA7517'},
 ];
 
-function emptyBundle() {
-  const b = {};
-  BUNDLE_KEYS.forEach(k => b[k] = false);
-  return b;
-}
+const ET={
+  court:{label:'Court appearance',dotCls:'dot-court',badgeCls:'type-court'},
+  note:{label:'File note',dotCls:'dot-note',badgeCls:'type-note'},
+  doc:{label:'Document',dotCls:'dot-doc',badgeCls:'type-doc'},
+  task:{label:'Task completed',dotCls:'dot-task',badgeCls:'type-task'},
+  client:{label:'Client comm.',dotCls:'dot-client',badgeCls:'type-client'},
+  corr:{label:'Correspondence',dotCls:'dot-corr',badgeCls:'type-corr'},
+};
 
-let matters = [
-  {id:1, name:'R v Mokdassi', court:'District Court', type:'dc_sentence', nextDate:'2026-04-07', custody:true, stage:'Sentencing', currentTask:'Drafting sentence written submissions', nextTasks:'File written submissions; brief counsel on psych report; confirm interpreter', bundle:{psych:true,affidavit:false,apology:true,employment:false,supporting:true,submissions:false,crown:true}},
-  {id:2, name:'R v T. Nguyen, N. Nguyen & Bui', court:'District Court', type:'dc_sentence', nextDate:'2026-04-07', custody:true, stage:'Sentencing hearing (2 days)', currentTask:'Sentencing hearing 7–8 Apr', nextTasks:'Vietnamese interpreter confirmed; s77 filed for Bui & T Nguyen', bundle:emptyBundle()},
-  {id:3, name:'R v Rowlands', court:'District Court', type:'dc_sentence', nextDate:null, custody:false, stage:'Committed for sentence', currentTask:'Psychologist contacted — report and invoice received. Need to read brief and understand case history before drafting submissions.', nextTasks:'1. Read brief / case notes\n2. Research sentencing range\n3. Draft written submissions\n4. Build sentence bundle (letters, affidavit, psych report)', bundle:{psych:true,affidavit:false,apology:false,employment:false,supporting:false,submissions:false,crown:false}},
-  {id:4, name:'R v Al-Maanawi', court:'District Court – Campbelltown', type:'dc_sentence', nextDate:'2026-05-05', custody:false, stage:'Committed for sentence', currentTask:'Defence bundle sent to counsel', nextTasks:'Affidavit of Naji and apology letter to be signed and returned', bundle:{psych:false,affidavit:false,apology:false,employment:false,supporting:true,submissions:false,crown:true}},
-  {id:5, name:'R v Jean Felipe Costa', court:'Local Court', type:'lc_sentence', nextDate:'2026-04-15', custody:false, stage:'S4 granted — sentence 15 Apr', currentTask:'Waiting for employment letter and court report from Aspira', nextTasks:'Finalise sentence bundle; confirm interpreter', bundle:{psych:false,affidavit:false,apology:false,employment:true,supporting:false,submissions:false,crown:false}},
-  {id:6, name:'R v Metly', court:'District Court', type:'dc_sentence', nextDate:'2026-04-23', custody:false, stage:'Sentencing 23 Apr', currentTask:'Drafting letters for Bernie and Renee; organising sentence bundle', nextTasks:'Finalise bundle; review exhibits re wages', bundle:{psych:false,affidavit:false,apology:false,employment:false,supporting:false,submissions:false,crown:true}},
-  {id:7, name:'R v Chirinian (SDC)', court:'District Court', type:'dc_sentence', nextDate:'2026-04-24', custody:true, stage:'Sentence call over 24 Apr', currentTask:'Listed for sentence call over SDC 24/04', nextTasks:'Prepare for sentence appearance', bundle:emptyBundle()},
-  {id:8, name:'R v Chirinian (LC)', court:'Local Court – Campbelltown', type:'lc_sentence', nextDate:'2026-04-24', custody:false, stage:'Sentence SDC 24 Apr', currentTask:'PG entered to larceny and common assault', nextTasks:'Prepare sentence material', bundle:emptyBundle()},
-  {id:9, name:'R v Pereira Leal Ribeiro', court:'Local Court – Manly', type:'trial', nextDate:'2026-07-22', custody:false, stage:'Hearing 22 Jul 2026', currentTask:'PNG entered. Brief filed.', nextTasks:'Review brief; prepare cross-examination; obtain daughter statement', bundle:emptyBundle()},
-  {id:10, name:'R v Lee', court:'Local Court', type:'trial', nextDate:null, custody:false, stage:'Hearing date — vacate denied', currentTask:'Telstra metadata analysed — content not available from carrier', nextTasks:'Prepare summary of call timing; continue trial prep', bundle:emptyBundle()},
-  {id:11, name:'R v Jacob Malcolm', court:'District Court – Coffs Harbour', type:'trial', nextDate:null, custody:true, stage:'Case conference', currentTask:'180gb BoE uploaded to cloud for client access', nextTasks:'53 outstanding CCTV footage items still to be provided', bundle:emptyBundle()},
-  {id:12, name:'R v Robinson Trinh', court:'Local Court', type:'bail', nextDate:null, custody:false, stage:'Bail variation lodged', currentTask:'Bail variation application lodged with employer and sister letter', nextTasks:'Monitor outcome from registry', bundle:emptyBundle()},
-  {id:13, name:'R v Paul Walker', court:'Local Court – Sutherland', type:'lc_sentence', nextDate:null, custody:false, stage:'Sentencing / Merit', currentTask:'PG entered: drive disqualified + supply', nextTasks:'Confirm Merit suitability; confirm backup charge position', bundle:emptyBundle()},
-  {id:14, name:'R v Barakat', court:'Local Court', type:'bail', nextDate:null, custody:false, stage:'Rehab coordination', currentTask:'AVL for second-stage interview coordinated', nextTasks:'Monitor program status; update file notes', bundle:emptyBundle()},
-  {id:15, name:'R v Som', court:'Local Court', type:'trial', nextDate:'2026-07-23', custody:false, stage:'Hearing 23 Jul 2026', currentTask:'Hearing date confirmed', nextTasks:'BWF and 000 call to be served on us; review when received', bundle:emptyBundle()},
-  {id:16, name:'R v Nicholas Alexander', court:'District Court', type:'lc_sentence', nextDate:null, custody:false, stage:'Sentence vacated', currentTask:'Notice of motion to vacate sentence filed and served', nextTasks:'Await new date from court', bundle:emptyBundle()},
+const nowT=Date.now();
+let matters=[
+  {id:1,name:'R v Mokdassi',surname:'Mokdassi',caseNum:'',court:'District Court',type:'dc_sentence',nextDate:'2026-04-07',custody:true,stage:'Sentencing',currentTask:'Drafting sentence written submissions',nextStep:'Sentence written submissions',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-1800000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:2,name:'R v T. Nguyen, N. Nguyen & Bui',surname:'Nguyen / Bui',caseNum:'',court:'District Court',type:'dc_sentence',nextDate:'2026-04-07',custody:true,stage:'Sentencing hearing',currentTask:'Sentencing hearing 7–8 Apr',nextStep:'Sentencing hearing 7–8 Apr',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-7200000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:3,name:'R v Rowlands',surname:'Rowlands',caseNum:'',court:'District Court',type:'dc_sentence',nextDate:null,custody:false,stage:'Committed for sentence',currentTask:'Psychologist contacted — read brief before drafting submissions.',nextStep:'Sentence bundle and submissions',officeDate:'2026-04-04',officeLabel:'Read Rowlands brief — start submissions',flagged:false,lastAccess:nowT-600000,stageOverride:4,earlyFinalised:false,earlyLabel:'',entries:[
+    {id:'e1',type:'court',note:'First mention at District Court. Client present. Matter mentioned. Committed for sentence on plea of guilty.',staff:'JR',date:'2026-03-01T09:30:00',fileName:null,fileData:null},
+    {id:'e2',type:'note',note:'Read brief. Identified psychological report required. Contacted Dr Patel re availability and scope of report.',staff:'JR',date:'2026-04-01T14:20:00',fileName:null,fileData:null},
+    {id:'e3',type:'task',note:'Psychologist Dr Patel confirmed — report due 18 April 2026. Invoice received and forwarded to accounts.',staff:'JR',date:'2026-04-02T10:05:00',fileName:null,fileData:null},
+  ]},
+  {id:4,name:'R v Al-Maanawi',surname:'Al-Maanawi',caseNum:'',court:'District Court – Campbelltown',type:'dc_sentence',nextDate:'2026-05-05',custody:false,stage:'Committed for sentence',currentTask:'Defence bundle sent to counsel',nextStep:'Affidavit and apology letter to sign',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-18000000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:5,name:'R v Jean Felipe Costa',surname:'Costa',caseNum:'',court:'Local Court',type:'lc_sentence',nextDate:'2026-04-15',custody:false,stage:'S4 granted — sentence 15 Apr',currentTask:'Waiting for employment letter and court report',nextStep:'Sentence 15 Apr — finalise bundle',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-86400000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:6,name:'R v Metly',surname:'Metly',caseNum:'',court:'District Court',type:'dc_sentence',nextDate:'2026-04-23',custody:false,stage:'Sentencing 23 Apr',currentTask:'Drafting letters for Bernie and Renee',nextStep:'Finalise bundle for 23 Apr',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-10800000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:7,name:'R v Chirinian (SDC)',surname:'Chirinian',caseNum:'',court:'District Court',type:'dc_sentence',nextDate:'2026-04-24',custody:true,stage:'Sentence call over 24 Apr',currentTask:'Listed for sentence call over SDC',nextStep:'Sentence call over 24 Apr',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-172800000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:8,name:'R v Chirinian (LC)',surname:'Chirinian',caseNum:'',court:'Local Court – Campbelltown',type:'lc_sentence',nextDate:'2026-04-24',custody:false,stage:'Sentence SDC 24 Apr',currentTask:'PG entered to larceny and common assault',nextStep:'Prepare sentence material',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-172800000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:9,name:'R v Pereira Leal Ribeiro',surname:'Pereira Leal Ribeiro',caseNum:'',court:'Local Court – Manly',type:'trial',nextDate:'2026-07-22',custody:false,stage:'Hearing 22 Jul 2026',currentTask:'PNG entered. Brief filed.',nextStep:'Hearing 22 Jul — trial prep',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-259200000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:10,name:'R v Lee',surname:'Lee',caseNum:'87378077',court:'Local Court',type:'trial',nextDate:null,custody:false,stage:'Hearing date — vacate denied',currentTask:'Telstra metadata analysed',nextStep:'Trial prep — subpoena analysis',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-345600000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:11,name:'R v Jacob Malcolm',surname:'Malcolm',caseNum:'',court:'District Court – Coffs Harbour',type:'trial',nextDate:null,custody:true,stage:'Case conference',currentTask:'180gb BoE uploaded to cloud',nextStep:'Obtain remaining 53 CCTV items',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-432000000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:12,name:'R v Robinson Trinh',surname:'Trinh',caseNum:'',court:'Local Court',type:'bail',nextDate:null,custody:false,stage:'Bail variation lodged',currentTask:'Bail variation application lodged',nextStep:'Monitor bail variation outcome',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-518400000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:13,name:'R v Paul Walker',surname:'Walker',caseNum:'',court:'Local Court – Sutherland',type:'lc_sentence',nextDate:null,custody:false,stage:'Sentencing / Merit',currentTask:'PG entered: drive disqualified + supply',nextStep:'Confirm Merit suitability',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-604800000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:14,name:'R v Barakat',surname:'Barakat',caseNum:'',court:'Local Court',type:'bail',nextDate:null,custody:false,stage:'Rehab coordination',currentTask:'AVL for second-stage interview coordinated',nextStep:'Monitor rehab program status',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-691200000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:15,name:'R v Som',surname:'Som',caseNum:'',court:'Local Court',type:'trial',nextDate:'2026-07-23',custody:false,stage:'Hearing 23 Jul 2026',currentTask:'Hearing date confirmed',nextStep:'Hearing 23 Jul — BWF to be served',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-777600000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
+  {id:16,name:'R v Nicholas Alexander',surname:'Alexander',caseNum:'2023/283020',court:'District Court',type:'lc_sentence',nextDate:null,custody:false,stage:'Sentence vacated',currentTask:'Notice of motion to vacate sentence filed',nextStep:'Await new sentence date',officeDate:null,officeLabel:'',flagged:false,lastAccess:nowT-864000000,stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]},
 ];
 
-const assistedMatters = [
-  {name:'R v Mitchell Wilson', court:'Local Court', stage:'Committal — Crown CC date pending'},
-  {name:'R v AK', court:'Appeal', stage:'Appeal mention 5 Feb 2026'},
-  {name:'R v Byrnes', court:'Local Court – Waverley', stage:'Compliance mention 19 Feb 2026'},
-  {name:'R v Vu & Tran', court:'Local Court – Parramatta', stage:'Committal mention 6 Mar 2026'},
-  {name:'R v Borg', court:'District Court', stage:'Pre-trial mention 11 Mar 2026'},
-  {name:'R v Mueller', court:'Local Court', stage:'Balance of brief 1 Apr 2026'},
-  {name:'R v Hudson', court:'District Court (CDPP)', stage:'Charge certification — response due 2 Apr 2026'},
-  {name:'R v Larcombe', court:'Local Court', stage:'Mention PME 15 Apr 2026'},
-  {name:'R v Brundu', court:'Local Court', stage:'Research — club incorporation'},
-  {name:'R v Dakhlaoui', court:'Local Court – Downing Centre', stage:'Finalised'},
-  {name:'R v Darmaraju', court:'District Court', stage:'Finalised'},
-  {name:'R v Erdogan', court:'Local Court', stage:'Finalised — charges withdrawn'},
+const assistedMatters=[
+  {name:'R v Mitchell Wilson',court:'Local Court',stage:'Committal — Crown CC date pending'},
+  {name:'R v AK',court:'Appeal',stage:'Appeal mention 5 Feb 2026'},
+  {name:'R v Byrnes',court:'Local Court – Waverley',stage:'Compliance mention 19 Feb 2026'},
+  {name:'R v Vu & Tran',court:'Local Court – Parramatta',stage:'Committal mention 6 Mar 2026'},
+  {name:'R v Borg',court:'District Court',stage:'Pre-trial mention 11 Mar 2026'},
+  {name:'R v Mueller',court:'Local Court',stage:'Balance of brief 1 Apr 2026'},
+  {name:'R v Hudson',court:'District Court (CDPP)',stage:'Charge certification — response due 2 Apr 2026'},
+  {name:'R v Larcombe',court:'Local Court',stage:'Mention PME 15 Apr 2026'},
+  {name:'R v Brundu',court:'Local Court',stage:'Research — club incorporation'},
+  {name:'R v Dakhlaoui',court:'Local Court – Downing Centre',stage:'Finalised'},
+  {name:'R v Darmaraju',court:'District Court',stage:'Finalised'},
+  {name:'R v Erdogan',court:'Local Court',stage:'Finalised — charges withdrawn'},
 ];
 
-let nextId = 200;
-let editingId = null;
+let nextId=200,editingId=null,calYear=TODAY.getFullYear(),calMonth=TODAY.getMonth(),flagState=false;
+let activeMatterId=null,compType='court',pendingFile=null,pendingFileName=null,editingEntryId=null;
 
-// ── HELPERS ──
-function daysUntil(ds) {
-  if (!ds) return null;
-  return Math.round((new Date(ds) - TODAY) / 86400000);
+// ── NAVIGATION ──
+function goToDashboard(){
+  document.getElementById('view-dashboard').style.display='block';
+  document.getElementById('view-case').style.display='none';
+  activeMatterId=null;render();
+}
+function openCaseFile(id){
+  activeMatterId=id;
+  const m=matters.find(x=>x.id===id);
+  m.lastAccess=Date.now();
+  document.getElementById('view-dashboard').style.display='none';
+  document.getElementById('view-case').style.display='flex';
+  document.getElementById('view-case').style.flexDirection='column';
+  renderCaseFile(m);
+  saveToStorage();renderToday();
 }
 
-function fmtDate(ds) {
-  if (!ds) return '—';
-  const [y,m,d] = ds.split('-');
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return `${parseInt(d)} ${months[parseInt(m)-1]} ${y}`;
+// ── CALENDAR ──
+function calEv(){
+  const ev={};
+  function add(ds,t,l){if(!ds)return;if(!ev[ds])ev[ds]=[];ev[ds].push({t,l});}
+  matters.forEach(m=>{
+    if(m.nextDate){const t=m.flagged?'flag':isCS(m.stage)?'court':'office';add(m.nextDate,t,m.name);}
+    if(m.officeDate&&m.officeLabel)add(m.officeDate,'office',m.officeLabel);
+  });
+  return ev;
+}
+function renderCalendar(){
+  const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('cal-lbl').textContent=MN[calMonth]+' '+calYear;
+  const ev=calEv();
+  const first=new Date(calYear,calMonth,1);
+  let sd=first.getDay();sd=sd===0?6:sd-1;
+  const dim=new Date(calYear,calMonth+1,0).getDate();
+  const diPrev=new Date(calYear,calMonth,0).getDate();
+  const total=Math.ceil((sd+dim)/7)*7;
+  let html='';
+  for(let i=0;i<total;i++){
+    let day,mo,yr,other=false;
+    if(i<sd){day=diPrev-sd+i+1;mo=calMonth-1;yr=calYear;if(mo<0){mo=11;yr--;}other=true;}
+    else if(i>=sd+dim){day=i-sd-dim+1;mo=calMonth+1;yr=calYear;if(mo>11){mo=0;yr++;}other=true;}
+    else{day=i-sd+1;mo=calMonth;yr=calYear;}
+    const ds=`${yr}-${String(mo+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    const isT=ds===TS;
+    const de=ev[ds]||[];const types=de.map(e=>e.t);
+    const tip=de.map(e=>e.l).join(', ');
+    let cls='cday';
+    if(other)cls+=' other';
+    if(isT)cls+=' today';
+    else if(types.includes('flag'))cls+=' has-flag';
+    else if(types.includes('court'))cls+=' has-court';
+    else if(types.includes('office'))cls+=' has-office';
+    html+=`<div class="${cls}" title="${tip}">${day}</div>`;
+  }
+  document.getElementById('cal-days').innerHTML=html;
+}
+function calNav(d){
+  if(d===0){calYear=TODAY.getFullYear();calMonth=TODAY.getMonth();}
+  else{calMonth+=d;if(calMonth>11){calMonth=0;calYear++;}if(calMonth<0){calMonth=11;calYear--;}}
+  renderCalendar();
 }
 
-function urgBadge(m) {
-  if (!m.nextDate) return '<span class="badge b-grey">No date set</span>';
-  const d = daysUntil(m.nextDate);
-  if (d < 0) return `<span class="badge b-red">Overdue</span>`;
-  if (d === 0) return `<span class="badge b-red">Today</span>`;
-  if (d <= 7) return `<span class="badge b-red">${d}d</span>`;
-  if (d <= 30) return `<span class="badge b-amber">${d}d</span>`;
-  return `<span class="badge b-green">${d}d</span>`;
+// ── TODAY PANEL ──
+function renderToday(){
+  const dn=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('today-title').textContent=dn[TODAY.getDay()]+', '+TODAY.getDate()+' '+mn[TODAY.getMonth()];
+  const items=[];const seen=new Set();
+  matters.forEach(m=>{
+    if(!m.nextDate||seen.has(m.id))return;
+    const d=Math.round((new Date(m.nextDate)-TODAY)/86400000);
+    if(d>=0&&d<=7){items.push({p:0,m,cls:'urg',tag:'tg-urg',tl:d===0?'TODAY':d+'d',det:m.stage});seen.add(m.id);}
+  });
+  matters.forEach(m=>{
+    if(!m.officeDate||!m.officeLabel||seen.has(m.id))return;
+    const d=Math.round((new Date(m.officeDate)-TODAY)/86400000);
+    if(d<=1&&d>=-3){items.push({p:1,m,cls:'off',tag:'tg-off',tl:'Office',det:m.officeLabel});seen.add(m.id);}
+  });
+  matters.forEach(m=>{
+    if(!m.flagged||seen.has(m.id))return;
+    items.push({p:2,m,cls:'soon',tag:'tg-soon',tl:'Flagged',det:'Needs attention'});seen.add(m.id);
+  });
+  matters.forEach(m=>{
+    if(!m.nextDate||seen.has(m.id))return;
+    const d=Math.round((new Date(m.nextDate)-TODAY)/86400000);
+    if(d>7&&d<=21){items.push({p:3,m,cls:'soon',tag:'tg-soon',tl:d+'d',det:m.stage});seen.add(m.id);}
+  });
+  const rec=[...matters].sort((a,b)=>(b.lastAccess||0)-(a.lastAccess||0));
+  let rc=0;
+  rec.forEach(m=>{
+    if(seen.has(m.id)||rc>=5)return;
+    items.push({p:4,m,cls:'',tag:'tg-rec',tl:'Recent',det:m.currentTask||m.stage});
+    seen.add(m.id);rc++;
+  });
+  const show=items.slice(0,10);
+  if(!show.length){document.getElementById('today-list').innerHTML='<div class="empty-ti">Nothing urgent today</div>';return;}
+  document.getElementById('today-list').innerHTML=show.map(it=>`
+    <div class="ti ${it.cls}" onclick="openCaseFile(${it.m.id})">
+      <div class="ti-name">${it.m.name}</div>
+      <div class="ti-det">${it.det||''}</div>
+      <span class="ti-tag ${it.tag}">${it.tl}</span>
+    </div>`).join('');
 }
 
-function bundleProgress(b) {
-  const done = BUNDLE_KEYS.filter(k => b[k]).length;
-  return { done, total: BUNDLE_KEYS.length };
-}
-
-function showBundle(type) {
-  return ['dc_sentence','lc_sentence'].includes(type);
-}
-
-// ── RENDER ──
-function render() {
-  renderStats();
-  renderMyMatters();
-  renderAssisted();
-}
-
-function renderStats() {
-  const active = matters.length;
-  const custody = matters.filter(m => m.custody).length;
-  const thisMonth = matters.filter(m => {
-    if (!m.nextDate) return false;
-    const d = new Date(m.nextDate);
-    return d.getFullYear() === 2026 && d.getMonth() === 3 && d >= TODAY;
+// ── STATS ──
+function renderStats(){
+  const active=matters.length;
+  const custody=matters.filter(m=>m.custody).length;
+  const thisMonth=matters.filter(m=>{
+    if(!m.nextDate)return false;
+    const d=new Date(m.nextDate);
+    return d.getFullYear()===TODAY.getFullYear()&&d.getMonth()===TODAY.getMonth()&&d>=TODAY;
   }).length;
-  const urgent = matters.filter(m => {
-    if (!m.nextDate) return false;
-    const d = daysUntil(m.nextDate);
-    return d >= 0 && d <= 7;
+  const urgent=matters.filter(m=>{
+    if(!m.nextDate)return false;
+    return Math.round((new Date(m.nextDate)-TODAY)/86400000)<=7;
   }).length;
-
-  document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card"><div class="stat-n ${urgent > 0 ? 'red' : ''}">${urgent}</div><div class="stat-l">Due this week</div></div>
-    <div class="stat-card"><div class="stat-n">${thisMonth}</div><div class="stat-l">Hearings in April</div></div>
-    <div class="stat-card"><div class="stat-n ${custody > 0 ? 'red' : ''}">${custody}</div><div class="stat-l">In custody</div></div>
-    <div class="stat-card"><div class="stat-n">${active}</div><div class="stat-l">Active matters</div></div>
-  `;
+  document.getElementById('stats-grid').innerHTML=`
+    <div class="stat-card"><div class="stat-n ${urgent>0?'red':''}">${urgent}</div><div class="stat-l">Due this week</div></div>
+    <div class="stat-card"><div class="stat-n">${thisMonth}</div><div class="stat-l">Hearings this month</div></div>
+    <div class="stat-card"><div class="stat-n ${custody>0?'red':''}">${custody}</div><div class="stat-l">In custody</div></div>
+    <div class="stat-card"><div class="stat-n">${active}</div><div class="stat-l">Active matters</div></div>`;
 }
 
-function renderMyMatters() {
-  let html = '';
-  TYPES.forEach(t => {
-    const group = matters.filter(m => m.type === t.key);
-    if (!group.length) return;
-    html += `<div class="type-group">
-      <div class="type-header">
-        <div class="type-dot" style="background:${t.dotColor}"></div>
-        ${t.label}
-      </div>`;
-    group.forEach(m => {
-      const prog = bundleProgress(m.bundle);
-      const sb = showBundle(m.type);
-      html += `
-      <div class="matter-card" id="card-${m.id}">
-        <div class="card-header" onclick="toggleCard(${m.id})">
-          <div class="card-header-main">
-            <div class="matter-name">${m.name}</div>
-            <div class="matter-meta">${m.court} · ${m.stage}</div>
-          </div>
-          <div class="card-header-right">
-            ${urgBadge(m)}
-            ${m.custody ? '<span class="badge b-red">Custody</span>' : ''}
-            ${sb ? `<span class="badge b-grey" id="prog-${m.id}">${prog.done}/${prog.total} docs</span>` : ''}
-            <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>
-          </div>
+// ── DASHBOARD LIST ──
+function du(ds){if(!ds)return null;return Math.round((new Date(ds)-TODAY)/86400000);}
+function fd(ds){
+  if(!ds)return'—';
+  const[y,m,d]=ds.split('-');
+  const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return parseInt(d)+' '+mn[parseInt(m)-1]+' '+y;
+}
+function ub(m){
+  if(!m.nextDate)return'<span class="badge b-grey">No date</span>';
+  const d=du(m.nextDate);
+  if(d<0)return'<span class="badge b-red">Overdue</span>';
+  if(d===0)return'<span class="badge b-red">Today</span>';
+  if(d<=7)return`<span class="badge b-red">${d}d</span>`;
+  if(d<=30)return`<span class="badge b-amber">${d}d</span>`;
+  return`<span class="badge b-green">${d}d</span>`;
+}
+
+function renderMyMatters(){
+  let html='';
+  TYPES.forEach(t=>{
+    const group=matters.filter(m=>m.type===t.key);
+    if(!group.length)return;
+    html+=`<div class="type-group"><div class="type-hd"><div class="type-dot" style="background:${t.color}"></div>${t.label}</div>`;
+    group.forEach(m=>{
+      const ec=m.entries?m.entries.length:0;
+      const si=detectStage(m);
+      const sl=STAGES[si]?STAGES[si].label:'—';
+      html+=`<div class="matter-row" onclick="openCaseFile(${m.id})">
+        <div class="mr-main">
+          <div class="mr-name">${m.surname||m.name}${m.flagged?' <span style="color:var(--flag-txt);font-size:10px">&#9873;</span>':''}</div>
+          <div class="mr-sub">${m.nextStep||m.stage}${m.caseNum?' &nbsp;·&nbsp; <span style="font-family:DM Mono,monospace;font-size:10px">'+m.caseNum+'</span>':''}</div>
         </div>
-        <div class="card-body">
-          <div class="current-task">
-            <div class="ct-label">Currently working on</div>
-            <div class="ct-text" id="ct-${m.id}">${m.currentTask || '—'}</div>
-          </div>
-          <div class="fields">
-            <div class="field">
-              <div class="field-lbl">Next steps</div>
-              <div class="field-val" style="white-space:pre-wrap" id="ns-${m.id}">${m.nextTasks || '—'}</div>
-            </div>
-            <div class="field">
-              <div class="field-lbl">Next date</div>
-              <div class="field-val">${fmtDate(m.nextDate)}</div>
-            </div>
-          </div>
-          ${sb ? `
-          <div class="bundle-section">
-            <div class="bundle-label">Sentence bundle — tick when received / done</div>
-            <div class="bundle-grid" id="bundle-${m.id}">
-              ${BUNDLE_LABELS.map((lbl, i) => {
-                const k = BUNDLE_KEYS[i];
-                return `<div class="bundle-item ${m.bundle[k] ? 'checked' : ''}" onclick="toggleBundle(event,${m.id},'${k}')">
-                  <div class="bundle-dot"></div>${lbl}
-                </div>`;
-              }).join('')}
-            </div>
-          </div>` : ''}
-          <div class="card-actions">
-            <button class="btn" onclick="openEditModal(${m.id})">Edit matter</button>
-            <button class="btn btn-danger" onclick="finaliseMatter(event,${m.id})">Mark finalised</button>
-          </div>
+        <div class="mr-right">
+          ${ub(m)}
+          ${m.custody?'<span class="badge b-red">Custody</span>':''}
+          <span class="badge b-grey">${sl}</span>
+          ${ec>0?`<span class="badge b-blue">${ec}</span>`:''}
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text3)"><path d="M6 4l4 4-4 4"/></svg>
         </div>
       </div>`;
     });
-    html += '</div>';
+    html+='</div>';
   });
-  document.getElementById('my-matters-root').innerHTML = html;
+  document.getElementById('my-root').innerHTML=html;
+}
+function renderAssisted(){
+  document.getElementById('assisted-root').innerHTML=assistedMatters.map(m=>`
+    <div class="a-row">
+      <div><div class="a-name">${m.name}</div><div class="a-court">${m.court}</div></div>
+      <div class="a-stage">${m.stage}</div>
+    </div>`).join('');
 }
 
-function renderAssisted() {
-  document.getElementById('assisted-root').innerHTML = assistedMatters.map(m => `
-    <div class="assisted-row">
-      <div>
-        <div class="assisted-name">${m.name}</div>
-        <div class="assisted-court">${m.court}</div>
+// ── CASE FILE ──
+function renderCaseFile(m){
+  document.getElementById('cf-surname').textContent=m.surname||m.name;
+  const si=detectStage(m);
+  const current=STAGES[si];
+  const next=STAGES[si+1];
+  let stagesText='';
+  if(m.earlyFinalised){
+    stagesText=`<strong>Finalised</strong> — ${m.earlyLabel||'Early finalisation'}`;
+  } else {
+    stagesText=`Current: <strong>${current?current.label:'—'}</strong>`;
+    if(next) stagesText+=` &nbsp;·&nbsp; Next: <strong>${next.label}</strong>`;
+  }
+  document.getElementById('cf-stages-auto').innerHTML=stagesText;
+  document.getElementById('cf-casenum').textContent=m.caseNum?'Case no. '+m.caseNum:'';
+  const d=m.nextDate?du(m.nextDate):null;
+  let badges='';
+  if(m.custody)badges+=`<span class="badge b-red">Custody</span>`;
+  if(m.nextDate){
+    if(d===0)badges+=`<span class="badge b-red">Court today</span>`;
+    else if(d>0&&d<=7)badges+=`<span class="badge b-red">Court in ${d}d — ${fd(m.nextDate)}</span>`;
+    else if(d>0&&d<=30)badges+=`<span class="badge b-amber">Court ${fd(m.nextDate)}</span>`;
+    else if(d>0)badges+=`<span class="badge b-green">${fd(m.nextDate)}</span>`;
+  }
+  if(m.flagged)badges+=`<span class="badge b-amber">&#9873; Flagged</span>`;
+  document.getElementById('cf-badges').innerHTML=badges;
+  renderProgressTrack(m,si);
+  renderTimeline(m);
+}
+
+// ── PROGRESS TRACKER ──
+function renderProgressTrack(m,si){
+  const isEarly=m.earlyFinalised;
+  const steps=document.getElementById('pt-steps');
+  const fill=document.getElementById('pt-line-fill');
+  const collapsed=document.getElementById('pt-collapsed');
+
+  // icons
+  const checkSVG=`<svg viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="2"><path d="M3 8l4 4 6-6"/></svg>`;
+  const dotSVG=`<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="currentColor"/></svg>`;
+  const warnSVG=`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 6v4M8 12h.01"/></svg>`;
+
+  let html='';
+  STAGES.forEach((s,i)=>{
+    let cirCls='pt-circle pending',lblCls='pt-label',icon=dotSVG;
+    if(isEarly){
+      if(i<si){cirCls='pt-circle done';icon=checkSVG;lblCls='pt-label done';}
+      else if(i===si){cirCls='pt-circle early-end';icon=warnSVG;lblCls='pt-label early-end';}
+      else{cirCls='pt-circle pending';lblCls='pt-label';}
+    } else {
+      if(i<si){cirCls='pt-circle done';icon=checkSVG;lblCls='pt-label done';}
+      else if(i===si){cirCls='pt-circle active';icon=dotSVG;lblCls='pt-label active';}
+      else{cirCls='pt-circle pending';lblCls='pt-label';}
+    }
+    html+=`<div class="pt-step">
+      <div class="${cirCls}" title="${s.label}">${icon}</div>
+      <div class="${lblCls}">${s.label}</div>
+    </div>`;
+  });
+  steps.innerHTML=html;
+
+  // line fill width
+  const pct=si===0?0:Math.min(100,Math.round((si/(STAGES.length-1))*100));
+  fill.style.width=pct+'%';
+
+  // early finalisation banner
+  if(isEarly){
+    collapsed.innerHTML=`<div class="pt-collapsed">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 6v4M8 12h.01M14 8A6 6 0 112 8a6 6 0 0112 0z"/></svg>
+      ${m.earlyLabel||'Finalised early — remaining stages not applicable'}
+    </div>`;
+  } else {
+    collapsed.innerHTML='';
+  }
+}
+
+// ── STAGE MODAL ──
+function openStageModal(){
+  const m=matters.find(x=>x.id===activeMatterId);if(!m)return;
+  const so=m.stageOverride!==null&&m.stageOverride!==undefined?String(m.stageOverride):'';
+  document.getElementById('sm-stage').value=so;
+  document.getElementById('sm-early').checked=m.earlyFinalised||false;
+  document.getElementById('sm-early-label').value=m.earlyLabel||'';
+  document.getElementById('sm-early-label').style.display=m.earlyFinalised?'block':'none';
+  document.getElementById('stage-modal').classList.add('open');
+}
+document.getElementById('sm-early').addEventListener('change',function(){
+  document.getElementById('sm-early-label').style.display=this.checked?'block':'none';
+});
+function saveStageOverride(){
+  const m=matters.find(x=>x.id===activeMatterId);if(!m)return;
+  const v=document.getElementById('sm-stage').value;
+  m.stageOverride=v===''?null:parseInt(v);
+  m.earlyFinalised=document.getElementById('sm-early').checked;
+  m.earlyLabel=document.getElementById('sm-early-label').value.trim();
+  closeModal('stage-modal');
+  renderCaseFile(m);saveToStorage();
+}
+
+// ── TIMELINE ──
+function renderTimeline(m){
+  const entries=m.entries||[];
+  const sorted=[...entries].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  document.getElementById('tl-count').textContent=sorted.length+' '+(sorted.length===1?'entry':'entries');
+  if(!sorted.length){
+    document.getElementById('case-timeline').innerHTML='<div class="empty-tl">No entries yet. Add the first entry above.</div>';
+    return;
+  }
+  const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('case-timeline').innerHTML=sorted.map(e=>{
+    const et=ET[e.type]||ET.note;
+    const d=new Date(e.date);
+    const ds=d.getDate()+' '+MN[d.getMonth()]+' '+d.getFullYear();
+    const ts=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+    const fileHtml=e.fileName?`<div class="tl-file" onclick="openFile('${e.id}')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6l3 3v9a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v3h3"/></svg>
+      <span class="tl-file-name">${e.fileName}</span>
+      <span style="font-size:10px;margin-left:auto">View</span>
+    </div>`:'';
+    return `<div class="tl-entry" id="tl-${e.id}">
+      <div class="tl-dot ${et.dotCls}"></div>
+      <div class="tl-card">
+        <div class="tl-card-top">
+          <div class="tl-meta">
+            <span class="tl-type-badge ${et.badgeCls}">${et.label}</span>
+            <div class="tl-note">${escHtml(e.note)}</div>
+          </div>
+          <div class="tl-right">
+            <div class="tl-date">${ds}<br>${ts}</div>
+            <div class="tl-staff-dot" title="${e.staff||'JR'}">${e.staff||'JR'}</div>
+            <div class="tl-actions">
+              <button class="tl-action-btn" onclick="openEntryEdit('${e.id}')" title="Edit entry">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 2l3 3-9 9H2v-3L11 2z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        ${fileHtml}
       </div>
-      <div class="assisted-stage">${m.stage}</div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
-// ── INTERACTIONS ──
-function toggleCard(id) {
-  document.getElementById('card-' + id).classList.toggle('expanded');
+function escHtml(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ── ENTRY EDIT ──
+function openEntryEdit(eid){
+  const m=matters.find(x=>x.id===activeMatterId);if(!m)return;
+  const e=m.entries.find(x=>x.id===eid);if(!e)return;
+  editingEntryId=eid;
+  document.getElementById('em-type').value=e.type;
+  document.getElementById('em-note').value=e.note||'';
+  document.getElementById('em-staff').value=e.staff||'JR';
+  // format date for datetime-local
+  const d=new Date(e.date);
+  const pad=n=>String(n).padStart(2,'0');
+  const local=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  document.getElementById('em-date').value=local;
+  document.getElementById('entry-modal').classList.add('open');
+}
+function saveEntryEdit(){
+  const m=matters.find(x=>x.id===activeMatterId);if(!m)return;
+  const e=m.entries.find(x=>x.id===editingEntryId);if(!e)return;
+  e.type=document.getElementById('em-type').value;
+  e.note=document.getElementById('em-note').value.trim();
+  e.staff=document.getElementById('em-staff').value;
+  const dv=document.getElementById('em-date').value;
+  if(dv) e.date=new Date(dv).toISOString();
+  closeModal('entry-modal');
+  renderTimeline(m);saveToStorage();
+}
+function deleteEntry(){
+  if(!confirm('Delete this entry?'))return;
+  const m=matters.find(x=>x.id===activeMatterId);if(!m)return;
+  m.entries=m.entries.filter(x=>x.id!==editingEntryId);
+  closeModal('entry-modal');
+  renderCaseFile(m);saveToStorage();
 }
 
-function toggleBundle(e, id, key) {
-  e.stopPropagation();
-  const m = matters.find(x => x.id === id);
-  if (!m) return;
-  m.bundle[key] = !m.bundle[key];
-  const item = e.currentTarget;
-  item.classList.toggle('checked');
-  const prog = bundleProgress(m.bundle);
-  const progEl = document.getElementById('prog-' + id);
-  if (progEl) progEl.textContent = `${prog.done}/${prog.total} docs`;
+// ── COMPOSER ──
+function setCompType(btn){
+  document.querySelectorAll('.comp-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');compType=btn.dataset.type;
+  const ph={court:'Describe the court appearance — what happened, orders made, adj date…',note:'Write your file note or memo…',doc:'Describe the document being uploaded…',task:'Describe the task completed…',client:'Describe the communication — call, meeting, email…',corr:'Describe the correspondence sent or received…'};
+  document.getElementById('comp-text').placeholder=ph[compType]||'Add a note…';
+}
+function handleFileSelect(input){
+  if(input.files&&input.files[0]){
+    const file=input.files[0];
+    pendingFileName=file.name;
+    const reader=new FileReader();
+    reader.onload=e=>{pendingFile=e.target.result;};
+    reader.readAsDataURL(file);
+    document.getElementById('comp-file-name').textContent=file.name;
+    if(compType!=='doc'){
+      document.querySelectorAll('.comp-type-btn').forEach(b=>{b.classList.remove('active');if(b.dataset.type==='doc')b.classList.add('active');});
+      compType='doc';
+    }
+  }
+}
+function addEntry(){
+  const m=matters.find(x=>x.id===activeMatterId);if(!m)return;
+  const note=document.getElementById('comp-text').value.trim();
+  const staff=document.getElementById('comp-staff').value;
+  if(!note&&!pendingFile){alert('Please write a note or attach a file.');return;}
+  if(!m.entries)m.entries=[];
+  m.entries.push({id:'e'+Date.now(),type:compType,note:note||'(File attached)',staff,date:new Date().toISOString(),fileName:pendingFileName||null,fileData:pendingFile||null});
+  document.getElementById('comp-text').value='';
+  document.getElementById('comp-file-name').textContent='';
+  document.getElementById('comp-file-input').value='';
+  pendingFile=null;pendingFileName=null;
+  m.lastAccess=Date.now();
+  // auto update stage override if not set
+  if(m.stageOverride===null||m.stageOverride===undefined){
+    const ns=detectStage(m);
+    if(ns>0) m.stageOverride=null; // keep auto
+  }
   saveToStorage();
+  renderCaseFile(m);renderMyMatters();
+}
+function openFile(eid){
+  const m=matters.find(x=>x.id===activeMatterId);if(!m)return;
+  const e=m.entries.find(x=>x.id===eid);
+  if(!e||!e.fileData)return;
+  const win=window.open();
+  if(win)win.document.write(`<iframe src="${e.fileData}" style="width:100%;height:100%;border:none"></iframe>`);
 }
 
-function finaliseMatter(e, id) {
-  e.stopPropagation();
-  const m = matters.find(x => x.id === id);
-  if (!m) return;
-  if (!confirm(`Mark "${m.name}" as finalised and remove from active list?`)) return;
-  matters = matters.filter(x => x.id !== id);
-  renderStats();
-  renderMyMatters();
-  saveToStorage();
+// ── MATTER MODALS ──
+function toggleFlag(){
+  flagState=!flagState;
+  document.getElementById('ef-flag').checked=flagState;
+  document.getElementById('ef-flag-row').classList.toggle('on',flagState);
 }
-
-// ── MODALS ──
-function openEditModal(id) {
-  editingId = id;
-  const m = matters.find(x => x.id === id);
-  document.getElementById('edit-modal-title').textContent = m.name;
-  document.getElementById('ef-name').value = m.name;
-  document.getElementById('ef-court').value = m.court;
-  document.getElementById('ef-type').value = m.type;
-  document.getElementById('ef-date').value = m.nextDate || '';
-  document.getElementById('ef-stage').value = m.stage;
-  document.getElementById('ef-task').value = m.currentTask || '';
-  document.getElementById('ef-next').value = m.nextTasks || '';
-  document.getElementById('ef-custody').checked = m.custody;
-  document.getElementById('edit-modal').classList.add('open');
-}
-
-function saveEdit() {
-  const m = matters.find(x => x.id === editingId);
-  if (!m) return;
-  m.name = document.getElementById('ef-name').value.trim() || m.name;
-  m.court = document.getElementById('ef-court').value.trim();
-  m.type = document.getElementById('ef-type').value;
-  m.nextDate = document.getElementById('ef-date').value || null;
-  m.stage = document.getElementById('ef-stage').value.trim();
-  m.currentTask = document.getElementById('ef-task').value.trim();
-  m.nextTasks = document.getElementById('ef-next').value.trim();
-  m.custody = document.getElementById('ef-custody').checked;
-  closeModal('edit-modal');
-  renderStats();
-  renderMyMatters();
-  saveToStorage();
-  setTimeout(() => {
-    const card = document.getElementById('card-' + editingId);
-    if (card) card.classList.add('expanded');
-  }, 20);
-}
-
-function openAddModal() {
-  ['af-name','af-court','af-stage','af-task','af-next'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('af-date').value = '';
-  document.getElementById('af-custody').checked = false;
+function openAddModal(){
+  ['af-name','af-casenum','af-court','af-nextstep','af-stage','af-task','af-odate','af-olabel'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('af-custody').checked=false;
   document.getElementById('add-modal').classList.add('open');
 }
-
-function addMatter() {
-  const name = document.getElementById('af-name').value.trim();
-  if (!name) { alert('Matter name is required.'); return; }
-  matters.push({
-    id: nextId++,
-    name,
-    court: document.getElementById('af-court').value.trim(),
-    type: document.getElementById('af-type').value,
-    nextDate: document.getElementById('af-date').value || null,
-    custody: document.getElementById('af-custody').checked,
-    stage: document.getElementById('af-stage').value.trim(),
-    currentTask: document.getElementById('af-task').value.trim(),
-    nextTasks: document.getElementById('af-next').value.trim(),
-    bundle: emptyBundle(),
-  });
-  closeModal('add-modal');
-  renderStats();
-  renderMyMatters();
-  saveToStorage();
+function addMatter(){
+  const name=document.getElementById('af-name').value.trim();
+  if(!name){alert('Matter name is required.');return;}
+  const parts=name.split(' ');
+  const surname=parts.length>2?parts.slice(2).join(' '):name;
+  matters.push({id:nextId++,name,surname,caseNum:document.getElementById('af-casenum').value.trim(),court:document.getElementById('af-court').value.trim(),type:document.getElementById('af-type').value,nextDate:document.getElementById('af-date').value||null,custody:document.getElementById('af-custody').checked,stage:document.getElementById('af-stage').value.trim(),currentTask:document.getElementById('af-task').value.trim(),nextStep:document.getElementById('af-nextstep').value.trim(),officeDate:document.getElementById('af-odate').value||null,officeLabel:document.getElementById('af-olabel').value.trim(),flagged:false,lastAccess:Date.now(),stageOverride:null,earlyFinalised:false,earlyLabel:'',entries:[]});
+  closeModal('add-modal');render();saveToStorage();
 }
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
+function openEditModal(id){
+  editingId=id;
+  const m=matters.find(x=>x.id===id);
+  document.getElementById('edit-title').textContent=m.name;
+  document.getElementById('ef-name').value=m.name;
+  document.getElementById('ef-casenum').value=m.caseNum||'';
+  document.getElementById('ef-court').value=m.court;
+  document.getElementById('ef-type').value=m.type;
+  document.getElementById('ef-date').value=m.nextDate||'';
+  document.getElementById('ef-nextstep').value=m.nextStep||'';
+  document.getElementById('ef-stage').value=m.stage;
+  document.getElementById('ef-task').value=m.currentTask||'';
+  document.getElementById('ef-odate').value=m.officeDate||'';
+  document.getElementById('ef-olabel').value=m.officeLabel||'';
+  document.getElementById('ef-custody').checked=m.custody;
+  flagState=m.flagged||false;
+  document.getElementById('ef-flag').checked=flagState;
+  document.getElementById('ef-flag-row').classList.toggle('on',flagState);
+  document.getElementById('edit-modal').classList.add('open');
 }
-
-document.querySelectorAll('.modal-backdrop').forEach(el => {
-  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
-});
-
-// ── TABS ──
-function showTab(t) {
-  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+function saveEdit(){
+  const m=matters.find(x=>x.id===editingId);if(!m)return;
+  m.name=document.getElementById('ef-name').value.trim()||m.name;
+  const parts=m.name.split(' ');m.surname=parts.length>2?parts.slice(2).join(' '):m.name;
+  m.caseNum=document.getElementById('ef-casenum').value.trim();
+  m.court=document.getElementById('ef-court').value.trim();
+  m.type=document.getElementById('ef-type').value;
+  m.nextDate=document.getElementById('ef-date').value||null;
+  m.nextStep=document.getElementById('ef-nextstep').value.trim();
+  m.stage=document.getElementById('ef-stage').value.trim();
+  m.currentTask=document.getElementById('ef-task').value.trim();
+  m.officeDate=document.getElementById('ef-odate').value||null;
+  m.officeLabel=document.getElementById('ef-olabel').value.trim();
+  m.custody=document.getElementById('ef-custody').checked;
+  m.flagged=flagState;m.lastAccess=Date.now();
+  closeModal('edit-modal');
+  if(activeMatterId===editingId)renderCaseFile(m);
+  render();saveToStorage();
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-backdrop').forEach(el=>{el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');});});
+function showTab(t){
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-section').forEach(el=>el.classList.remove('active'));
   document.querySelector(`.tab-btn[onclick="showTab('${t}')"]`).classList.add('active');
-  document.getElementById('tab-' + t).classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
 }
 
-// ── STORAGE (saves edits in the browser so they persist between visits) ──
-function saveToStorage() {
-  try { localStorage.setItem('gg_matters', JSON.stringify(matters)); } catch(e){}
+// ── STORAGE ──
+function saveToStorage(){
+  try{
+    const lite=matters.map(m=>({...m,entries:(m.entries||[]).map(e=>({...e,fileData:null}))}));
+    localStorage.setItem('gg_v6',JSON.stringify(lite));
+    matters.forEach(m=>(m.entries||[]).forEach(e=>{if(e.fileData)try{localStorage.setItem('gg_f_'+e.id,e.fileData);}catch(er){}}));
+  }catch(er){}
 }
-
-function loadFromStorage() {
-  try {
-    const saved = localStorage.getItem('gg_matters');
-    if (saved) matters = JSON.parse(saved);
-  } catch(e){}
+function loadFromStorage(){
+  try{
+    const s=localStorage.getItem('gg_v6');
+    if(!s)return;
+    const loaded=JSON.parse(s);
+    loaded.forEach(lm=>{
+      const ex=matters.find(x=>x.id===lm.id);
+      const target=ex||lm;
+      if(ex)Object.assign(ex,lm);else matters.push(lm);
+      (target.entries||[]).forEach(e=>{if(!e.fileData){const fd=localStorage.getItem('gg_f_'+e.id);if(fd)e.fileData=fd;}});
+    });
+  }catch(er){}
 }
-
+function render(){renderStats();renderCalendar();renderToday();renderMyMatters();renderAssisted();}
 loadFromStorage();
 </script>
 </body>
