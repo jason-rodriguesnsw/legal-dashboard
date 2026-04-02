@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GG Legal — Practice Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --border: rgba(0,0,0,0.09);
+    --border-strong: rgba(0,0,0,0.18);
+    --text: #1a1a18;
+    --text2: #6b6b65;
+    --text3: #9b9b95;
+    --accent: #1a1a18;
+    --red: #c0392b;
+    --red-bg: #fdf0ef;
+    --amber: #92540a;
+    --amber-bg: #fdf3e3;
+    --green: #1a5c3a;
+    --green-bg: #eaf4ee;
+    --blue: #1a3a5c;
+    --blue-bg: #eaf1f8;
+    --purple: #3c2d7a;
+    --purple-bg: #f0edfb;
+    --teal: #0d5c4a;
+    --teal-bg: #e4f3ef;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--text);
+  }
+
+  .login-box {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 360px;
+    margin: 1rem;
+  }
+
+  .login-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    color: var(--text2);
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+  }
+
+  .login-title {
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: .3rem;
+  }
+
+  .login-sub {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 1.75rem;
+  }
+
+  .login-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .login-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    background: var(--bg);
+    color: var(--text);
+    margin-bottom: 1rem;
+    outline: none;
+    transition: border-color .15s;
+  }
+
+  .login-input:focus { border-color: var(--text); }
+
+  .login-btn {
+    width: 100%;
+    padding: 11px;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity .15s;
+  }
+
+  .login-btn:hover { opacity: .88; }
+
+  .login-err {
+    font-size: 12px;
+    color: var(--red);
+    margin-top: .75rem;
+    display: none;
+  }
+
+  /* ── APP ── */
+  #app { display: none; }
+
+  .topbar {
+    background: var(--text);
+    color: #fff;
+    padding: 0 1.5rem;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .topbar-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    opacity: .9;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .topbar-user {
+    font-size: 12px;
+    opacity: .6;
+  }
+
+  .topbar-logout {
+    font-size: 12px;
+    background: rgba(255,255,255,.12);
+    border: none;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 99px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .topbar-logout:hover { background: rgba(255,255,255,.2); }
+
+  .main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  /* ── STATS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+
+  .stat-n {
+    font-size: 28px;
+    font-weight: 300;
+    font-family: 'DM Mono', monospace;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-n.red { color: var(--red); }
+  .stat-l { font-size: 11px; color: var(--text2); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.25rem;
+  }
+
+  .tab-btn {
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--text2);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-family: 'DM Sans', sans-serif;
+    transition: color .15s;
+  }
+
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
+  .tab-btn:hover { color: var(--text); }
+
+  .tab-section { display: none; }
+  .tab-section.active { display: block; }
+
+  /* ── TYPE GROUP ── */
+  .type-group { margin-bottom: 2rem; }
+
+  .type-header {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: .75rem;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .type-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── MATTER CARD ── */
+  .matter-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: .6rem;
+    overflow: hidden;
+    transition: border-color .15s, box-shadow .15s;
+  }
+
+  .matter-card:hover { border-color: var(--border-strong); }
+  .matter-card.expanded { border-color: var(--border-strong); box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+
+  .card-header {
+    padding: 14px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .card-header-main { flex: 1; min-width: 0; }
+
+  .matter-name {
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .matter-meta { font-size: 12px; color: var(--text2); }
+
+  .card-header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    flex-shrink: 0;
+  }
+
+  .chevron {
+    width: 16px;
+    height: 16px;
+    color: var(--text3);
+    flex-shrink: 0;
+    transition: transform .2s;
+    margin-top: 2px;
+  }
+
+  .matter-card.expanded .chevron { transform: rotate(180deg); }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 9px;
+    border-radius: 99px;
+    white-space: nowrap;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .b-red { background: var(--red-bg); color: var(--red); }
+  .b-amber { background: var(--amber-bg); color: var(--amber); }
+  .b-green { background: var(--green-bg); color: var(--green); }
+  .b-blue { background: var(--blue-bg); color: var(--blue); }
+  .b-purple { background: var(--purple-bg); color: var(--purple); }
+  .b-teal { background: var(--teal-bg); color: var(--teal); }
+  .b-grey { background: var(--surface2); color: var(--text2); }
+
+  /* ── EXPAND BODY ── */
+  .card-body {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+  }
+
+  .matter-card.expanded .card-body { display: block; }
+
+  .current-task {
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin: 14px 0 12px;
+  }
+
+  .ct-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+
+  .ct-text { font-size: 13px; color: var(--text); }
+
+  .fields { display: grid; gap: 10px; margin-bottom: 14px; }
+
+  .field { display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: start; }
+
+  .field-lbl {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--text3);
+    padding-top: 3px;
+  }
+
+  .field-val { font-size: 13px; color: var(--text2); }
+
+  /* ── BUNDLE ── */
+  .bundle-section { margin-bottom: 14px; }
+  .bundle-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--text3);
+    margin-bottom: 8px;
+  }
+
+  .bundle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 5px;
+  }
+
+  .bundle-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--text2);
+    transition: all .1s;
+    user-select: none;
+  }
+
+  .bundle-item:hover { border-color: var(--border-strong); }
+
+  .bundle-item.checked {
+    background: var(--green-bg);
+    border-color: #6bbf8e;
+    color: var(--green);
+  }
+
+  .bundle-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    flex-shrink: 0;
+    opacity: .5;
+  }
+
+  .bundle-item.checked .bundle-dot {
+    background: var(--green);
+    border-color: var(--green);
+    opacity: 1;
+  }
+
+  /* ── ACTIONS ── */
+  .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .btn {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: none;
+    cursor: pointer;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    transition: background .12s;
+  }
+
+  .btn:hover { background: var(--surface2); }
+  .btn-danger { color: var(--red); border-color: #e8c0bc; }
+  .btn-danger:hover { background: var(--red-bg); }
+  .btn-primary { background: var(--text); color: #fff; border-color: var(--text); }
+  .btn-primary:hover { opacity: .88; background: var(--text); }
+
+  /* ── ADD NEW ── */
+  .add-btn {
+    width: 100%;
+    padding: 10px;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+    background: none;
+    font-size: 13px;
+    color: var(--text2);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all .12s;
+    margin-bottom: .6rem;
+  }
+
+  .add-btn:hover { background: var(--surface); color: var(--text); border-style: solid; }
+
+  /* ── MODAL ── */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .modal-backdrop.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 1.75rem;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+  }
+
+  .form-group { margin-bottom: 1rem; }
+  .form-label { font-size: 12px; font-weight: 500; color: var(--text2); display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em; }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--text); }
+  .form-textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; }
+
+  /* ── ASSISTED ── */
+  .assisted-table {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .assisted-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+
+  .assisted-row:last-child { border-bottom: none; }
+
+  .assisted-name { font-size: 13px; font-weight: 500; }
+  .assisted-court { font-size: 12px; color: var(--text2); margin-top: 1px; }
+  .assisted-stage { font-size: 12px; color: var(--text2); text-align: right; max-width: 220px; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+    .field { grid-template-columns: 1fr; gap: 2px; }
+    .card-header { flex-wrap: wrap; }
+    .card-header-right { width: 100%; justify-content: flex-start; }
+  }
+
+  .empty-type { display: none; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">GG Legal</div>
+    <div class="login-title">Practice dashboard</div>
+    <div class="login-sub">Jason Rodrigues — sign in to continue</div>
+    <label class="login-label">Username</label>
+    <input class="login-input" type="text" id="login-user" placeholder="username" autocomplete="username">
+    <label class="login-label">Password</label>
+    <input class="login-input" type="password" id="login-pass" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Sign in</button>
+    <div class="login-err" id="login-err">Incorrect username or password.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-logo">GG Legal / Dashboard</div>
+    <div class="topbar-right">
+      <span class="topbar-user">Jason Rodrigues</span>
+      <button class="topbar-logout" onclick="doLogout()">Sign out</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('my')">My matters</button>
+      <button class="tab-btn" onclick="showTab('assisted')">Assisted / agency</button>
+    </div>
+
+    <div id="tab-my" class="tab-section active">
+      <div id="my-matters-root"></div>
+      <button class="add-btn" onclick="openAddModal()">+ Add new matter</button>
+    </div>
+
+    <div id="tab-assisted" class="tab-section">
+      <div class="assisted-table" id="assisted-root"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-backdrop" id="edit-modal">
+  <div class="modal">
+    <div class="modal-title" id="edit-modal-title">Edit matter</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Matter name</label>
+        <input class="form-input" id="ef-name" type="text">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Court</label>
+        <input class="form-input" id="ef-court" type="text">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="ef-type">
+          <option value="trial">Trial</option>
+          <option value="dc_sentence">DC sentence</option>
+          <option value="lc_sentence">LC sentence</option>
+          <option value="bail">Bail / variation</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Next court date</label>
+        <input class="form-input" id="ef-date" type="date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Stage</label>
+      <input class="form-input" id="ef-stage" type="text" placeholder="e.g. Committed for sentence">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Currently working on</label>
+      <textarea class="form-textarea" id="ef-task" placeholder="What are you actively doing right now?"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Next steps / to do</label>
+      <textarea class="form-textarea" id="ef-next" placeholder="What needs to happen next?"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">
+        <input type="checkbox" id="ef-custody" style="margin-right:6px">
+        Client in custody
+      </label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('edit-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal-backdrop" id="add-modal">
+  <div class="modal">
+    <div class="modal-title">Add new matter</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Matter name</label>
+        <input class="form-input" id="af-name" type="text" placeholder="R v ...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Court</label>
+        <input class="form-input" id="af-court" type="text" placeholder="e.g. District Court">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="af-type">
+          <option value="trial">Trial</option>
+          <option value="dc_sentence">DC sentence</option>
+          <option value="lc_sentence">LC sentence</option>
+          <option value="bail">Bail / variation</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Next court date</label>
+        <input class="form-input" id="af-date" type="date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Stage</label>
+      <input class="form-input" id="af-stage" type="text" placeholder="e.g. First mention">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Currently working on</label>
+      <textarea class="form-textarea" id="af-task"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Next steps</label>
+      <textarea class="form-textarea" id="af-next"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">
+        <input type="checkbox" id="af-custody" style="margin-right:6px">
+        Client in custody
+      </label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('add-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addMatter()">Add matter</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── AUTH ──
+const USERS = { jason: 'gg2026' };
+
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim().toLowerCase();
+  const p = document.getElementById('login-pass').value;
+  if (USERS[u] && USERS[u] === p) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    render();
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+// ── DATA ──
+const BUNDLE_KEYS = ['psych','affidavit','apology','employment','supporting','submissions','crown'];
+const BUNDLE_LABELS = ['Psych / medical report','Affidavit (defendant)','Letter of apology','Employment letter','Supporting letters','Written submissions','Crown bundle reviewed'];
+
+const TODAY = new Date('2026-04-02');
+
+const TYPES = [
+  { key: 'trial', label: 'Trial matters', color: '#7F77DD', dotColor: '#7F77DD' },
+  { key: 'dc_sentence', label: 'District Court sentence', color: '#D4537E', dotColor: '#D4537E' },
+  { key: 'lc_sentence', label: 'Local Court sentence', color: '#1D9E75', dotColor: '#1D9E75' },
+  { key: 'bail', label: 'Bail applications & variations', color: '#BA7517', dotColor: '#BA7517' },
+];
+
+function emptyBundle() {
+  const b = {};
+  BUNDLE_KEYS.forEach(k => b[k] = false);
+  return b;
+}
+
+let matters = [
+  {id:1, name:'R v Mokdassi', court:'District Court', type:'dc_sentence', nextDate:'2026-04-07', custody:true, stage:'Sentencing', currentTask:'Drafting sentence written submissions', nextTasks:'File written submissions; brief counsel on psych report; confirm interpreter', bundle:{psych:true,affidavit:false,apology:true,employment:false,supporting:true,submissions:false,crown:true}},
+  {id:2, name:'R v T. Nguyen, N. Nguyen & Bui', court:'District Court', type:'dc_sentence', nextDate:'2026-04-07', custody:true, stage:'Sentencing hearing (2 days)', currentTask:'Sentencing hearing 7–8 Apr', nextTasks:'Vietnamese interpreter confirmed; s77 filed for Bui & T Nguyen', bundle:emptyBundle()},
+  {id:3, name:'R v Rowlands', court:'District Court', type:'dc_sentence', nextDate:null, custody:false, stage:'Committed for sentence', currentTask:'Psychologist contacted — report and invoice received. Need to read brief and understand case history before drafting submissions.', nextTasks:'1. Read brief / case notes\n2. Research sentencing range\n3. Draft written submissions\n4. Build sentence bundle (letters, affidavit, psych report)', bundle:{psych:true,affidavit:false,apology:false,employment:false,supporting:false,submissions:false,crown:false}},
+  {id:4, name:'R v Al-Maanawi', court:'District Court – Campbelltown', type:'dc_sentence', nextDate:'2026-05-05', custody:false, stage:'Committed for sentence', currentTask:'Defence bundle sent to counsel', nextTasks:'Affidavit of Naji and apology letter to be signed and returned', bundle:{psych:false,affidavit:false,apology:false,employment:false,supporting:true,submissions:false,crown:true}},
+  {id:5, name:'R v Jean Felipe Costa', court:'Local Court', type:'lc_sentence', nextDate:'2026-04-15', custody:false, stage:'S4 granted — sentence 15 Apr', currentTask:'Waiting for employment letter and court report from Aspira', nextTasks:'Finalise sentence bundle; confirm interpreter', bundle:{psych:false,affidavit:false,apology:false,employment:true,supporting:false,submissions:false,crown:false}},
+  {id:6, name:'R v Metly', court:'District Court', type:'dc_sentence', nextDate:'2026-04-23', custody:false, stage:'Sentencing 23 Apr', currentTask:'Drafting letters for Bernie and Renee; organising sentence bundle', nextTasks:'Finalise bundle; review exhibits re wages', bundle:{psych:false,affidavit:false,apology:false,employment:false,supporting:false,submissions:false,crown:true}},
+  {id:7, name:'R v Chirinian (SDC)', court:'District Court', type:'dc_sentence', nextDate:'2026-04-24', custody:true, stage:'Sentence call over 24 Apr', currentTask:'Listed for sentence call over SDC 24/04', nextTasks:'Prepare for sentence appearance', bundle:emptyBundle()},
+  {id:8, name:'R v Chirinian (LC)', court:'Local Court – Campbelltown', type:'lc_sentence', nextDate:'2026-04-24', custody:false, stage:'Sentence SDC 24 Apr', currentTask:'PG entered to larceny and common assault', nextTasks:'Prepare sentence material', bundle:emptyBundle()},
+  {id:9, name:'R v Pereira Leal Ribeiro', court:'Local Court – Manly', type:'trial', nextDate:'2026-07-22', custody:false, stage:'Hearing 22 Jul 2026', currentTask:'PNG entered. Brief filed.', nextTasks:'Review brief; prepare cross-examination; obtain daughter statement', bundle:emptyBundle()},
+  {id:10, name:'R v Lee', court:'Local Court', type:'trial', nextDate:null, custody:false, stage:'Hearing date — vacate denied', currentTask:'Telstra metadata analysed — content not available from carrier', nextTasks:'Prepare summary of call timing; continue trial prep', bundle:emptyBundle()},
+  {id:11, name:'R v Jacob Malcolm', court:'District Court – Coffs Harbour', type:'trial', nextDate:null, custody:true, stage:'Case conference', currentTask:'180gb BoE uploaded to cloud for client access', nextTasks:'53 outstanding CCTV footage items still to be provided', bundle:emptyBundle()},
+  {id:12, name:'R v Robinson Trinh', court:'Local Court', type:'bail', nextDate:null, custody:false, stage:'Bail variation lodged', currentTask:'Bail variation application lodged with employer and sister letter', nextTasks:'Monitor outcome from registry', bundle:emptyBundle()},
+  {id:13, name:'R v Paul Walker', court:'Local Court – Sutherland', type:'lc_sentence', nextDate:null, custody:false, stage:'Sentencing / Merit', currentTask:'PG entered: drive disqualified + supply', nextTasks:'Confirm Merit suitability; confirm backup charge position', bundle:emptyBundle()},
+  {id:14, name:'R v Barakat', court:'Local Court', type:'bail', nextDate:null, custody:false, stage:'Rehab coordination', currentTask:'AVL for second-stage interview coordinated', nextTasks:'Monitor program status; update file notes', bundle:emptyBundle()},
+  {id:15, name:'R v Som', court:'Local Court', type:'trial', nextDate:'2026-07-23', custody:false, stage:'Hearing 23 Jul 2026', currentTask:'Hearing date confirmed', nextTasks:'BWF and 000 call to be served on us; review when received', bundle:emptyBundle()},
+  {id:16, name:'R v Nicholas Alexander', court:'District Court', type:'lc_sentence', nextDate:null, custody:false, stage:'Sentence vacated', currentTask:'Notice of motion to vacate sentence filed and served', nextTasks:'Await new date from court', bundle:emptyBundle()},
+];
+
+const assistedMatters = [
+  {name:'R v Mitchell Wilson', court:'Local Court', stage:'Committal — Crown CC date pending'},
+  {name:'R v AK', court:'Appeal', stage:'Appeal mention 5 Feb 2026'},
+  {name:'R v Byrnes', court:'Local Court – Waverley', stage:'Compliance mention 19 Feb 2026'},
+  {name:'R v Vu & Tran', court:'Local Court – Parramatta', stage:'Committal mention 6 Mar 2026'},
+  {name:'R v Borg', court:'District Court', stage:'Pre-trial mention 11 Mar 2026'},
+  {name:'R v Mueller', court:'Local Court', stage:'Balance of brief 1 Apr 2026'},
+  {name:'R v Hudson', court:'District Court (CDPP)', stage:'Charge certification — response due 2 Apr 2026'},
+  {name:'R v Larcombe', court:'Local Court', stage:'Mention PME 15 Apr 2026'},
+  {name:'R v Brundu', court:'Local Court', stage:'Research — club incorporation'},
+  {name:'R v Dakhlaoui', court:'Local Court – Downing Centre', stage:'Finalised'},
+  {name:'R v Darmaraju', court:'District Court', stage:'Finalised'},
+  {name:'R v Erdogan', court:'Local Court', stage:'Finalised — charges withdrawn'},
+];
+
+let nextId = 200;
+let editingId = null;
+
+// ── HELPERS ──
+function daysUntil(ds) {
+  if (!ds) return null;
+  return Math.round((new Date(ds) - TODAY) / 86400000);
+}
+
+function fmtDate(ds) {
+  if (!ds) return '—';
+  const [y,m,d] = ds.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${parseInt(d)} ${months[parseInt(m)-1]} ${y}`;
+}
+
+function urgBadge(m) {
+  if (!m.nextDate) return '<span class="badge b-grey">No date set</span>';
+  const d = daysUntil(m.nextDate);
+  if (d < 0) return `<span class="badge b-red">Overdue</span>`;
+  if (d === 0) return `<span class="badge b-red">Today</span>`;
+  if (d <= 7) return `<span class="badge b-red">${d}d</span>`;
+  if (d <= 30) return `<span class="badge b-amber">${d}d</span>`;
+  return `<span class="badge b-green">${d}d</span>`;
+}
+
+function bundleProgress(b) {
+  const done = BUNDLE_KEYS.filter(k => b[k]).length;
+  return { done, total: BUNDLE_KEYS.length };
+}
+
+function showBundle(type) {
+  return ['dc_sentence','lc_sentence'].includes(type);
+}
+
+// ── RENDER ──
+function render() {
+  renderStats();
+  renderMyMatters();
+  renderAssisted();
+}
+
+function renderStats() {
+  const active = matters.length;
+  const custody = matters.filter(m => m.custody).length;
+  const thisMonth = matters.filter(m => {
+    if (!m.nextDate) return false;
+    const d = new Date(m.nextDate);
+    return d.getFullYear() === 2026 && d.getMonth() === 3 && d >= TODAY;
+  }).length;
+  const urgent = matters.filter(m => {
+    if (!m.nextDate) return false;
+    const d = daysUntil(m.nextDate);
+    return d >= 0 && d <= 7;
+  }).length;
+
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card"><div class="stat-n ${urgent > 0 ? 'red' : ''}">${urgent}</div><div class="stat-l">Due this week</div></div>
+    <div class="stat-card"><div class="stat-n">${thisMonth}</div><div class="stat-l">Hearings in April</div></div>
+    <div class="stat-card"><div class="stat-n ${custody > 0 ? 'red' : ''}">${custody}</div><div class="stat-l">In custody</div></div>
+    <div class="stat-card"><div class="stat-n">${active}</div><div class="stat-l">Active matters</div></div>
+  `;
+}
+
+function renderMyMatters() {
+  let html = '';
+  TYPES.forEach(t => {
+    const group = matters.filter(m => m.type === t.key);
+    if (!group.length) return;
+    html += `<div class="type-group">
+      <div class="type-header">
+        <div class="type-dot" style="background:${t.dotColor}"></div>
+        ${t.label}
+      </div>`;
+    group.forEach(m => {
+      const prog = bundleProgress(m.bundle);
+      const sb = showBundle(m.type);
+      html += `
+      <div class="matter-card" id="card-${m.id}">
+        <div class="card-header" onclick="toggleCard(${m.id})">
+          <div class="card-header-main">
+            <div class="matter-name">${m.name}</div>
+            <div class="matter-meta">${m.court} · ${m.stage}</div>
+          </div>
+          <div class="card-header-right">
+            ${urgBadge(m)}
+            ${m.custody ? '<span class="badge b-red">Custody</span>' : ''}
+            ${sb ? `<span class="badge b-grey" id="prog-${m.id}">${prog.done}/${prog.total} docs</span>` : ''}
+            <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="current-task">
+            <div class="ct-label">Currently working on</div>
+            <div class="ct-text" id="ct-${m.id}">${m.currentTask || '—'}</div>
+          </div>
+          <div class="fields">
+            <div class="field">
+              <div class="field-lbl">Next steps</div>
+              <div class="field-val" style="white-space:pre-wrap" id="ns-${m.id}">${m.nextTasks || '—'}</div>
+            </div>
+            <div class="field">
+              <div class="field-lbl">Next date</div>
+              <div class="field-val">${fmtDate(m.nextDate)}</div>
+            </div>
+          </div>
+          ${sb ? `
+          <div class="bundle-section">
+            <div class="bundle-label">Sentence bundle — tick when received / done</div>
+            <div class="bundle-grid" id="bundle-${m.id}">
+              ${BUNDLE_LABELS.map((lbl, i) => {
+                const k = BUNDLE_KEYS[i];
+                return `<div class="bundle-item ${m.bundle[k] ? 'checked' : ''}" onclick="toggleBundle(event,${m.id},'${k}')">
+                  <div class="bundle-dot"></div>${lbl}
+                </div>`;
+              }).join('')}
+            </div>
+          </div>` : ''}
+          <div class="card-actions">
+            <button class="btn" onclick="openEditModal(${m.id})">Edit matter</button>
+            <button class="btn btn-danger" onclick="finaliseMatter(event,${m.id})">Mark finalised</button>
+          </div>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  document.getElementById('my-matters-root').innerHTML = html;
+}
+
+function renderAssisted() {
+  document.getElementById('assisted-root').innerHTML = assistedMatters.map(m => `
+    <div class="assisted-row">
+      <div>
+        <div class="assisted-name">${m.name}</div>
+        <div class="assisted-court">${m.court}</div>
+      </div>
+      <div class="assisted-stage">${m.stage}</div>
+    </div>
+  `).join('');
+}
+
+// ── INTERACTIONS ──
+function toggleCard(id) {
+  document.getElementById('card-' + id).classList.toggle('expanded');
+}
+
+function toggleBundle(e, id, key) {
+  e.stopPropagation();
+  const m = matters.find(x => x.id === id);
+  if (!m) return;
+  m.bundle[key] = !m.bundle[key];
+  const item = e.currentTarget;
+  item.classList.toggle('checked');
+  const prog = bundleProgress(m.bundle);
+  const progEl = document.getElementById('prog-' + id);
+  if (progEl) progEl.textContent = `${prog.done}/${prog.total} docs`;
+  saveToStorage();
+}
+
+function finaliseMatter(e, id) {
+  e.stopPropagation();
+  const m = matters.find(x => x.id === id);
+  if (!m) return;
+  if (!confirm(`Mark "${m.name}" as finalised and remove from active list?`)) return;
+  matters = matters.filter(x => x.id !== id);
+  renderStats();
+  renderMyMatters();
+  saveToStorage();
+}
+
+// ── MODALS ──
+function openEditModal(id) {
+  editingId = id;
+  const m = matters.find(x => x.id === id);
+  document.getElementById('edit-modal-title').textContent = m.name;
+  document.getElementById('ef-name').value = m.name;
+  document.getElementById('ef-court').value = m.court;
+  document.getElementById('ef-type').value = m.type;
+  document.getElementById('ef-date').value = m.nextDate || '';
+  document.getElementById('ef-stage').value = m.stage;
+  document.getElementById('ef-task').value = m.currentTask || '';
+  document.getElementById('ef-next').value = m.nextTasks || '';
+  document.getElementById('ef-custody').checked = m.custody;
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function saveEdit() {
+  const m = matters.find(x => x.id === editingId);
+  if (!m) return;
+  m.name = document.getElementById('ef-name').value.trim() || m.name;
+  m.court = document.getElementById('ef-court').value.trim();
+  m.type = document.getElementById('ef-type').value;
+  m.nextDate = document.getElementById('ef-date').value || null;
+  m.stage = document.getElementById('ef-stage').value.trim();
+  m.currentTask = document.getElementById('ef-task').value.trim();
+  m.nextTasks = document.getElementById('ef-next').value.trim();
+  m.custody = document.getElementById('ef-custody').checked;
+  closeModal('edit-modal');
+  renderStats();
+  renderMyMatters();
+  saveToStorage();
+  setTimeout(() => {
+    const card = document.getElementById('card-' + editingId);
+    if (card) card.classList.add('expanded');
+  }, 20);
+}
+
+function openAddModal() {
+  ['af-name','af-court','af-stage','af-task','af-next'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('af-date').value = '';
+  document.getElementById('af-custody').checked = false;
+  document.getElementById('add-modal').classList.add('open');
+}
+
+function addMatter() {
+  const name = document.getElementById('af-name').value.trim();
+  if (!name) { alert('Matter name is required.'); return; }
+  matters.push({
+    id: nextId++,
+    name,
+    court: document.getElementById('af-court').value.trim(),
+    type: document.getElementById('af-type').value,
+    nextDate: document.getElementById('af-date').value || null,
+    custody: document.getElementById('af-custody').checked,
+    stage: document.getElementById('af-stage').value.trim(),
+    currentTask: document.getElementById('af-task').value.trim(),
+    nextTasks: document.getElementById('af-next').value.trim(),
+    bundle: emptyBundle(),
+  });
+  closeModal('add-modal');
+  renderStats();
+  renderMyMatters();
+  saveToStorage();
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+document.querySelectorAll('.modal-backdrop').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
+// ── TABS ──
+function showTab(t) {
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+  document.querySelector(`.tab-btn[onclick="showTab('${t}')"]`).classList.add('active');
+  document.getElementById('tab-' + t).classList.add('active');
+}
+
+// ── STORAGE (saves edits in the browser so they persist between visits) ──
+function saveToStorage() {
+  try { localStorage.setItem('gg_matters', JSON.stringify(matters)); } catch(e){}
+}
+
+function loadFromStorage() {
+  try {
+    const saved = localStorage.getItem('gg_matters');
+    if (saved) matters = JSON.parse(saved);
+  } catch(e){}
+}
+
+loadFromStorage();
+</script>
+</body>
+</html>
