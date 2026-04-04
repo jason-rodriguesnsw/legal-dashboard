@@ -413,6 +413,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .tabs{display:none}
 
 @media(max-width:960px){.dash-body{grid-template-columns:1fr;}.dash-side{display:none}}
+
+/* ALL MATTERS TABLE */
+.all-matters-table{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.amt-header{display:grid;grid-template-columns:3fr 2fr 1.2fr 1fr 1fr 80px;gap:0;padding:8px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.amt-header-cell{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3)}
+.amt-row{display:grid;grid-template-columns:3fr 2fr 1.2fr 1fr 1fr 80px;gap:0;padding:11px 16px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;transition:background .12s}
+.amt-row:last-child{border-bottom:none}
+.amt-row:hover{background:var(--surface2)}
+.amt-row.assisted-row-style{opacity:.7}
+.amt-cell{font-size:12px;color:var(--text2);padding-right:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.amt-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.amt-name-sub{font-size:11px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.amt-type-pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:500;padding:2px 9px;border-radius:99px}
+.amt-section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:10px 16px 6px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--border)}
+.amt-count{font-family:DM Mono,monospace;font-size:10px;background:var(--surface3);color:var(--text3);padding:1px 7px;border-radius:99px}
+.amt-empty{padding:2rem;text-align:center;color:var(--text3);font-size:13px}
+
 @media(max-width:700px){.sidebar{display:none}.stats-grid{grid-template-columns:repeat(2,1fr);padding:1rem}.dash-topbar{padding:1rem 1rem 0}.dash-body{padding:0 1rem 1rem}}
 </style>
 </head>
@@ -436,8 +453,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
   <div class="topbar">
     <div class="topbar-brand" onclick="goToDashboard()">GG Legal</div>
     <div class="topbar-nav">
-      <button class="topbar-nav-btn active" onclick="goToDashboard()">Dashboard</button>
-      <button class="topbar-nav-btn" onclick="goToDashboard()">Matters</button>
+      <button class="topbar-nav-btn active" id="nav-dashboard" onclick="goToDashboard()">Dashboard</button>
+      <button class="topbar-nav-btn" id="nav-matters" onclick="goToMatters()">All matters</button>
     </div>
     <div class="topbar-r">
       <span class="topbar-greeting">Jason Rodrigues</span>
@@ -632,6 +649,40 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
           </div>
           <div class="timeline" id="case-timeline"></div>
         </div>
+      </div>
+
+      <!-- ALL MATTERS VIEW -->
+      <div id="view-matters" style="display:none;padding:1.5rem 1.75rem 4rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+          <div style="font-size:18px;font-weight:600;color:var(--text)">All matters</div>
+          <button class="dash-new-btn" onclick="openAddModal()">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v12M2 8h12"/></svg>
+            New matter
+          </button>
+        </div>
+
+        <!-- Search/filter bar -->
+        <div style="display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap">
+          <input type="text" id="matters-search" placeholder="Search by name or court..." oninput="renderAllMatters()"
+            style="flex:1;min-width:200px;padding:8px 12px;background:var(--surface);border:1px solid var(--border-m);border-radius:var(--radius-sm);font-family:DM Sans,sans-serif;font-size:13px;color:var(--text);outline:none">
+          <select id="matters-filter" onchange="renderAllMatters()"
+            style="padding:8px 12px;background:var(--surface);border:1px solid var(--border-m);border-radius:var(--radius-sm);font-family:DM Sans,sans-serif;font-size:13px;color:var(--text);outline:none">
+            <option value="all">All types</option>
+            <option value="trial">Trial</option>
+            <option value="dc_sentence">DC sentence</option>
+            <option value="lc_sentence">LC sentence</option>
+            <option value="bail">Bail</option>
+            <option value="assisted">Assisted / agency</option>
+          </select>
+          <select id="matters-sort" onchange="renderAllMatters()"
+            style="padding:8px 12px;background:var(--surface);border:1px solid var(--border-m);border-radius:var(--radius-sm);font-family:DM Sans,sans-serif;font-size:13px;color:var(--text);outline:none">
+            <option value="urgency">Sort: urgency</option>
+            <option value="name">Sort: name A–Z</option>
+            <option value="date">Sort: next date</option>
+          </select>
+        </div>
+
+        <div id="all-matters-root"></div>
       </div>
 
     </div>
@@ -889,16 +940,125 @@ let nextId=200,editingId=null,calYear=TODAY.getFullYear(),calMonth=TODAY.getMont
 let activeMatterId=null,compType='court',pendingFile=null,pendingFileName=null,editingEntryId=null;
 
 // ── NAVIGATION ──
+function goToMatters(){
+  document.getElementById('view-dashboard').style.display='none';
+  document.getElementById('view-case').style.display='none';
+  document.getElementById('view-matters').style.display='block';
+  activeMatterId=null;
+  document.querySelectorAll('.topbar-nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-matters').classList.add('active');
+  renderAllMatters();
+}
+
+function renderAllMatters(){
+  const q=(document.getElementById('matters-search')||{}).value||'';
+  const filter=(document.getElementById('matters-filter')||{}).value||'all';
+  const sort=(document.getElementById('matters-sort')||{}).value||'urgency';
+  const ql=q.toLowerCase();
+
+  const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const typeMap={trial:{label:'Trial',color:'#c0a8ff'},dc_sentence:{label:'DC sentence',color:'#f080cc'},lc_sentence:{label:'LC sentence',color:'#44d490'},bail:{label:'Bail',color:'#f0a050'}};
+
+  function fmtD(ds){
+    if(!ds)return'—';
+    const[y,m,d]=ds.split('-');
+    return parseInt(d)+' '+MN[parseInt(m)-1];
+  }
+  function daysDiff(ds){
+    if(!ds)return 9999;
+    return Math.round((new Date(ds)-TODAY)/86400000);
+  }
+
+  // Filter my matters
+  let myList=[...matters];
+  if(ql) myList=myList.filter(m=>(m.name||'').toLowerCase().includes(ql)||(m.court||'').toLowerCase().includes(ql)||(m.surname||'').toLowerCase().includes(ql));
+  if(filter!=='all'&&filter!=='assisted') myList=myList.filter(m=>m.type===filter);
+  if(filter==='assisted') myList=[];
+
+  // Sort
+  if(sort==='urgency') myList.sort((a,b)=>{
+    const da=a.nextDate?daysDiff(a.nextDate):9999;
+    const db=b.nextDate?daysDiff(b.nextDate):9999;
+    return da-db;
+  });
+  else if(sort==='name') myList.sort((a,b)=>(a.surname||a.name).localeCompare(b.surname||b.name));
+  else if(sort==='date') myList.sort((a,b)=>{
+    if(!a.nextDate&&!b.nextDate)return 0;
+    if(!a.nextDate)return 1;
+    if(!b.nextDate)return -1;
+    return new Date(a.nextDate)-new Date(b.nextDate);
+  });
+
+  // Filter assisted
+  let aList=[...assistedMatters];
+  if(ql) aList=aList.filter(m=>(m.name||'').toLowerCase().includes(ql)||(m.court||'').toLowerCase().includes(ql));
+  if(filter!=='all'&&filter!=='assisted') aList=[];
+
+  const root=document.getElementById('all-matters-root');
+  if(!root)return;
+
+  if(!myList.length&&!aList.length){
+    root.innerHTML='<div class="amt-empty">No matters match your search.</div>';
+    return;
+  }
+
+  let html='<div class="all-matters-table">';
+
+  // Header
+  html+='<div class="amt-header"><div class="amt-header-cell">Matter</div><div class="amt-header-cell">Court</div><div class="amt-header-cell">Type</div><div class="amt-header-cell">Next date</div><div class="amt-header-cell">Status</div><div class="amt-header-cell">Entries</div></div>';
+
+  if(myList.length){
+    html+='<div class="amt-section-label"><span>My matters</span><span class="amt-count">'+myList.length+'</span></div>';
+    myList.forEach(m=>{
+      const t=typeMap[m.type]||{label:'Other',color:'#9088b0'};
+      const dd=m.nextDate?daysDiff(m.nextDate):null;
+      const urgCls=dd===null?'b-grey':dd<0?'b-red':dd<=7?'b-red':dd<=21?'b-amber':'b-green';
+      const urgLbl=dd===null?'No date':dd<0?'Overdue':dd===0?'Today':dd+'d';
+      const ec=(m.entries||[]).length;
+      html+='<div class="amt-row" onclick="openCaseFile('+m.id+')">'+
+        '<div><div class="amt-name">'+(m.surname||m.name)+(m.flagged?' &#9873;':'')+'</div><div class="amt-name-sub">'+(m.nextStep||m.stage||'')+(m.caseNum?' · '+m.caseNum:'')+'</div></div>'+
+        '<div class="amt-cell">'+m.court+'</div>'+
+        '<div><span class="amt-type-pill" style="background:'+t.color+'18;color:'+t.color+'">'+t.label+'</span></div>'+
+        '<div class="amt-cell">'+(m.nextDate?fmtD(m.nextDate):'—')+'</div>'+
+        '<div><span class="badge '+urgCls+'">'+urgLbl+'</span>'+(m.custody?' <span class="badge b-red" style="margin-left:4px">Custody</span>':'')+'</div>'+
+        '<div class="amt-cell" style="font-family:DM Mono,monospace;font-size:11px;color:var(--text3)">'+( ec>0?ec+' entries':'—')+'</div>'+
+        '</div>';
+    });
+  }
+
+  if(aList.length){
+    html+='<div class="amt-section-label"><span>Assisted / agency</span><span class="amt-count">'+aList.length+'</span></div>';
+    aList.forEach(m=>{
+      html+='<div class="amt-row amt-row-assisted" style="opacity:.75">'+
+        '<div><div class="amt-name">'+m.name+'</div></div>'+
+        '<div class="amt-cell">'+m.court+'</div>'+
+        '<div><span class="amt-type-pill" style="background:var(--surface3);color:var(--text3)">Assisted</span></div>'+
+        '<div class="amt-cell">—</div>'+
+        '<div class="amt-cell">'+m.stage+'</div>'+
+        '<div class="amt-cell" style="color:var(--text3)">—</div>'+
+        '</div>';
+    });
+  }
+
+  html+='</div>';
+  root.innerHTML=html;
+}
+
 function goToDashboard(){
   document.getElementById('view-dashboard').style.display='block';
   document.getElementById('view-case').style.display='none';
-  activeMatterId=null;render();
+  document.getElementById('view-matters').style.display='none';
+  activeMatterId=null;
+  document.querySelectorAll('.topbar-nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-dashboard').classList.add('active');
+  render();
 }
 function openCaseFile(id){
   activeMatterId=id;
   const m=matters.find(x=>x.id===id);
   m.lastAccess=Date.now();
   document.getElementById('view-dashboard').style.display='none';
+  document.getElementById('view-matters').style.display='none';
   document.getElementById('view-case').style.display='flex';
   document.getElementById('view-case').style.flexDirection='column';
   renderCaseFile(m);
