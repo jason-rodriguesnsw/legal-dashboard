@@ -432,6 +432,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 
 @media(max-width:700px){.sidebar{display:none}.stats-grid{grid-template-columns:repeat(2,1fr);padding:1rem}.dash-topbar{padding:1rem 1rem 0}.dash-body{padding:0 1rem 1rem}}
 </style>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -457,6 +459,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
       <button class="topbar-nav-btn" id="nav-matters" onclick="goToMatters()">All matters</button>
     </div>
     <div class="topbar-r">
+      <span id="save-status" style="font-size:11px;font-family:DM Mono,monospace;color:var(--text3);min-width:60px;text-align:right"></span>
       <span class="topbar-greeting">Jason Rodrigues</span>
       <button class="topbar-out" onclick="resetToDefaults()" style="margin-right:4px;color:var(--text3);border-color:var(--border)">Reset data</button>
       <button class="topbar-out" onclick="doLogout()">Sign out</button>
@@ -1623,12 +1626,57 @@ function showTab(t){
 }
 
 // ── STORAGE ──
-function saveToStorage(){
+// ── FIREBASE ──
+const FB_CONFIG = {
+  apiKey: "AIzaSyCK-Jc7YRJ61kzWNARBbmr-CLq_SOf3S9w",
+  authDomain: "gg-legal-dashboard.firebaseapp.com",
+  projectId: "gg-legal-dashboard",
+  storageBucket: "gg-legal-dashboard.firebasestorage.app",
+  messagingSenderId: "364906931657",
+  appId: "1:364906931657:web:c80b5050377fd765c4b418"
+};
+firebase.initializeApp(FB_CONFIG);
+const db = firebase.firestore();
+const DOC_REF = db.collection('dashboard').doc('jason');
+
+let isSaving = false;
+let saveQueued = false;
+
+function showSaveStatus(msg, col){
+  let el = document.getElementById('save-status');
+  if(!el) return;
+  el.textContent = msg;
+  el.style.color = col || 'var(--text3)';
+}
+
+async function saveToStorage(){
+  if(isSaving){ saveQueued = true; return; }
+  isSaving = true;
+  showSaveStatus('Saving...', 'var(--amber)');
   try{
-    const lite=matters.map(m=>({...m,entries:(m.entries||[]).map(e=>({...e,fileData:null}))}));
-    localStorage.setItem('gg_v6',JSON.stringify(lite));
-    matters.forEach(m=>(m.entries||[]).forEach(e=>{if(e.fileData)try{localStorage.setItem('gg_f_'+e.id,e.fileData);}catch(er){}}));
-  }catch(er){}
+    // Strip fileData before saving to Firestore (too large)
+    const lite = matters.map(m=>({
+      ...m,
+      entries: (m.entries||[]).map(e=>({...e, fileData:null}))
+    }));
+    // Save files to localStorage separately
+    matters.forEach(m=>(m.entries||[]).forEach(e=>{
+      if(e.fileData) try{ localStorage.setItem('gg_f_'+e.id, e.fileData); }catch(er){}
+    }));
+    await DOC_REF.set({ matters: lite, updatedAt: new Date().toISOString() });
+    showSaveStatus('Saved', 'var(--green)');
+    setTimeout(()=>showSaveStatus('', ''), 2000);
+  } catch(er){
+    console.error('Save error:', er);
+    showSaveStatus('Save failed', 'var(--red)');
+    // Fallback to localStorage
+    try{
+      const lite = matters.map(m=>({...m,entries:(m.entries||[]).map(e=>({...e,fileData:null}))}));
+      localStorage.setItem('gg_v6', JSON.stringify(lite));
+    }catch(e2){}
+  }
+  isSaving = false;
+  if(saveQueued){ saveQueued=false; saveToStorage(); }
 }
 
 const IMPORTED_ENTRIES = {
@@ -1768,37 +1816,56 @@ const IMPORTED_ENTRIES = {
   ],
 };
 
-function loadFromStorage(){
-  // Always merge base imported entries first
+async function loadFromStorage(){
+  // Always start with imported historical entries as base
   matters.forEach(m=>{
     const imported = IMPORTED_ENTRIES[m.id];
     if(imported && imported.length) m.entries = [...imported];
   });
-  // Then overlay any saved data from localStorage on top
+  showSaveStatus('Loading...', 'var(--amber)');
   try{
-    const s=localStorage.getItem('gg_v6');
-    if(!s) return;
-    const loaded=JSON.parse(s);
-    loaded.forEach(lm=>{
-      const ex=matters.find(x=>x.id===lm.id);
-      if(!ex) return;
-      // Preserve all matter fields from saved data
-      Object.assign(ex, {...lm, entries: ex.entries});
-      // Merge saved entries on top of imported ones (avoid duplicates by id)
-      const savedEntries = lm.entries||[];
-      savedEntries.forEach(se=>{
-        if(!ex.entries.find(e=>e.id===se.id)){
-          ex.entries.push(se);
-        }
-        // Restore file data
-        if(!se.fileData){const fd=localStorage.getItem('gg_f_'+se.id);if(fd)se.fileData=fd;}
+    const snap = await DOC_REF.get();
+    if(snap.exists){
+      const data = snap.data();
+      const loaded = data.matters || [];
+      loaded.forEach(lm=>{
+        const ex = matters.find(x=>x.id===lm.id);
+        if(!ex){ matters.push(lm); return; }
+        // Overlay saved fields
+        Object.assign(ex, {...lm, entries: ex.entries});
+        // Merge saved entries (no duplicates)
+        const savedEntries = lm.entries||[];
+        savedEntries.forEach(se=>{
+          if(!ex.entries.find(e=>e.id===se.id)) ex.entries.push(se);
+          if(!se.fileData){ const fd=localStorage.getItem('gg_f_'+se.id); if(fd) se.fileData=fd; }
+        });
       });
-    });
-  }catch(er){}
+      showSaveStatus('', '');
+    } else {
+      // First time — no data in Firebase yet, save the defaults
+      showSaveStatus('First load — saving defaults...', 'var(--amber)');
+      await saveToStorage();
+    }
+  } catch(er){
+    console.error('Load error:', er);
+    showSaveStatus('Offline — using local data', 'var(--red)');
+    // Fallback to localStorage
+    try{
+      const s=localStorage.getItem('gg_v6');
+      if(s){
+        const loaded=JSON.parse(s);
+        loaded.forEach(lm=>{
+          const ex=matters.find(x=>x.id===lm.id);
+          if(ex){ Object.assign(ex,{...lm,entries:ex.entries}); (lm.entries||[]).forEach(se=>{if(!ex.entries.find(e=>e.id===se.id))ex.entries.push(se);}); }
+        });
+      }
+    }catch(e2){}
+  }
+  render();
 }
 
 function resetToDefaults(){
-  if(!confirm('This will clear all your saved edits and reload the original case data. Your uploaded files and custom entries added after the import will be lost. Continue?')) return;
+  if(!confirm('This will clear all saved edits and reload the original case data. Continue?')) return;
   localStorage.removeItem('gg_v6');
   matters.forEach(m=>{
     const imported = IMPORTED_ENTRIES[m.id];
@@ -1810,10 +1877,9 @@ function resetToDefaults(){
     if(m) renderCaseFile(m);
   }
   saveToStorage();
-  alert('Data reset. All historical entries have been reloaded.');
 }
 function render(){renderStats();renderCalendar();renderToday();renderMyMatters();renderAssisted();}
-loadFromStorage();
+loadFromStorage(); // async — render() called inside
 </script>
 </body>
 </html>
